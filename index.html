@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Guía de Valuación con Bloomberg</title><link href="styles.css" rel="stylesheet"/></head><body>
+<header><div><p class="eyebrow light">MAF - Fusiones y Adquisiciones</p><h1>Guía de valuación utilizando Bloomberg</h1><p>Curso: Fusiones y Adquisiciones, MAF Maestría en Finanzas · Prof. Dr. Jonas Lucio Maia</p></div><div class="header-note"><strong>Bloomberg Terminal</strong><span>DCF · Comparables · Precedentes</span></div></header>
+<nav aria-label="Secciones de la guía" class="guide-nav"><button data-page="overview" type="button">Mapa y ruta de trabajo</button><button data-page="terminal" type="button">Primeros pasos en Bloomberg</button><button data-page="company" type="button">Empresa, históricos y FCFF</button><button data-page="macro" type="button">Supuestos macro</button><button data-page="wacc" type="button">WACC</button><button data-page="forecast" type="button">Proyecciones, DCF y sensibilidad</button><button data-page="comps" type="button">Comparables</button><button data-page="precedents" type="button">Transacciones precedentes</button><button data-page="appendix" type="button">Cheat sheet y fuentes</button></nav><main><section class="guide-page" data-guide-page="overview" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Mapa y ruta de trabajo</h2><p>Panorama de las etapas, outputs y rutas alternativas de Bloomberg. Recolecte primero los datos y construya después el modelo y el football field.</p></div><section class="intro-card full-width-objective"><div><p class="eyebrow">Objetivo</p><h2>De la terminal al rango de valor</h2><p>Que el alumno sea capaz de valuar una empresa pública (o de referencia) por tres métodos: flujos de efectivo descontados (DCF), múltiplos de comparables y transacciones precedentes, obteniendo todos los insumos (WACC, proyecciones, inflación, costo de deuda, beta, prima de riesgo) desde Bloomberg Terminal, y que sepa integrar todo en un rango de valor tipo “football field” para una decisión de M&amp;A.</p><div class="didactic-note"><strong>Nota didáctica.</strong> Esta guía es la versión para Bloomberg de las guías de LSEG Workspace y Capital IQ Pro del mismo curso: el método de valuación es idéntico; lo que cambia es dónde vive cada dato. La característica de Bloomberg es que hay varias rutas (funciones) para llegar al mismo dato: en cada paso se presentan alternativas. La regla de la plataforma es escribir el ticker + la tecla amarilla del mercado (por ejemplo, &lt;EQUITY&gt;) + la función + &lt;GO&gt;; cuando estén perdidos, presionen la tecla verde &lt;HELP&gt; sobre cualquier pantalla para ver su manual, o escriban HELP HELP para chatear con un analista de Bloomberg 24/7.</div></div></section><article class="content-card guide-content"><h2 class="text-29" id="mapa-general-del-proceso"><strong>0. Mapa general del proceso</strong></h2><table>
+<colgroup>
+<col style="width: 19%"/>
+<col style="width: 29%"/>
+<col style="width: 51%"/>
+</colgroup>
+<thead>
+<tr>
+<th><strong>Etapa</strong></th>
+<th><strong>Qué obtenemos</strong></th>
+<th><strong>Funciones Bloomberg (rutas alternativas)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Perfil de la empresa</td>
+<td>Perfil, negocios, estructura accionaria</td>
+<td><code class="terminal-command">DES</code>, <code class="terminal-command">HH</code>, <code class="terminal-command">OWN</code>, <code class="terminal-command">CAST</code>, <code class="terminal-command">RELS</code>, <code class="terminal-command">CF</code>, <code class="terminal-command">CN</code></td>
+</tr>
+<tr>
+<td>2. Finanzas históricas</td>
+<td>Estados financieros 5-10 años</td>
+<td><code class="terminal-command">FA</code> (<code class="terminal-command">FA</code> IS / <code class="terminal-command">FA</code> BS / <code class="terminal-command">FA</code> <code class="terminal-command">CF</code>, <code class="terminal-command">FA</code> PROF), <code class="terminal-command">FG</code>, <code class="terminal-command">BIO</code></td>
+</tr>
+<tr>
+<td>3. Supuestos macro</td>
+<td>Inflación y crecimiento esperados</td>
+<td><code class="terminal-command">ECFC</code>, <code class="terminal-command">ECO</code>, <code class="terminal-command">ECST</code>/<code class="terminal-command">ESNP</code>, <code class="terminal-command">WIRP</code>, <code class="terminal-command">ILBE</code></td>
+</tr>
+<tr>
+<td>4. WACC</td>
+<td>Ke, Kd, pesos, WACC</td>
+<td><code class="terminal-command">CRP</code>/<code class="terminal-command">EQRP</code>, <code class="terminal-command">BETA</code>, <code class="terminal-command">DES</code>, <code class="terminal-command">DDIS</code>, <code class="terminal-command">YAS</code>, <code class="terminal-command">CRPR</code>, <code class="terminal-command">WCRP</code>, <code class="terminal-command">CDSW</code>, <code class="terminal-command">WACC</code></td>
+</tr>
+<tr>
+<td>5. Proyecciones</td>
+<td>Ventas, EBITDA, FCF proyectados</td>
+<td><code class="terminal-command">EE</code>, <code class="terminal-command">EEG</code>, <code class="terminal-command">ANR</code>, <code class="terminal-command">EA</code>, <code class="terminal-command">SURP</code>, <code class="terminal-command">BRC</code>, <code class="terminal-command">BI</code></td>
+</tr>
+<tr>
+<td>6. DCF</td>
+<td>Valor presente y EV</td>
+<td>Excel (<code class="terminal-command">BDP</code>/<code class="terminal-command">BDH</code>/<code class="terminal-command">BQL</code>, plantillas)</td>
+</tr>
+<tr>
+<td>7. Comparables</td>
+<td>Múltiplos de pares</td>
+<td><code class="terminal-command">RV</code>, <code class="terminal-command">RVR</code>, <code class="terminal-command">EQS</code>, <code class="terminal-command">WPE</code>, <code class="terminal-command">EE</code></td>
+</tr>
+<tr>
+<td>8. Precedentes</td>
+<td>Múltiplos y primas pagadas en M&amp;A</td>
+<td><code class="terminal-command">MA</code>, <code class="terminal-command">MNA</code>, <code class="terminal-command">LEAG</code>, NSE <code class="terminal-command">MNA</code></td>
+</tr>
+<tr>
+<td>9. Integración</td>
+<td>Rango de valor y precio de reserva</td>
+<td>Excel (football field)</td>
+</tr>
+</tbody>
+</table><p><strong>Flujo de trabajo sugerido para el alumno:</strong> primero recolectar datos (etapas 1-5 y 7-8), después construir el modelo en Excel (etapas 6 y 9).</p><p><strong><br/>
+</strong></p></article></section><section class="guide-page" data-guide-page="terminal" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Primeros pasos en Bloomberg</h2><p>Sintaxis universal, búsqueda de tickers, funciones esenciales, Excel add-in, exportación y disciplina de documentación.</p></div><div class="syntax-card"><span>Sintaxis universal</span><strong>TICKER + &lt;EQUITY&gt; + FUNCIÓN + &lt;GO&gt;</strong><small>Use &lt;HELP&gt; sobre cualquier pantalla o HELP HELP para asistencia.</small></div><article class="content-card guide-content"><h2 class="text-29" id="primeros-pasos-en-la-terminal"><strong>1. Primeros pasos en la terminal</strong></h2><section class="topic-card"><h3 class="text-71" id="acceder-y-entender-el-teclado"><strong>1.1 Acceder y entender el teclado</strong></h3>
+<ol type="1">
+<li><p>Bloomberg es una aplicación de escritorio (Windows) o de web (Bloomberg Anywhere); en la universidad se usa en los equipos con terminal asignado. Inicien sesión con su cuenta.</p></li>
+<li><p>Teclas amarillas = mercados: la más usada en este curso es <strong>&lt;EQUITY&gt;</strong> (acciones) y <strong>&lt;CORP&gt;</strong> (bonos corporativos); la tecla verde <strong>&lt;<code class="terminal-command">HELP</code>&gt;</strong> abre el manual de la pantalla activa.</p></li>
+<li><p>Sintaxis universal: <strong>ticker, tecla de mercado, función, &lt;GO&gt;</strong>. Ejemplo para toda la guía: <strong>WALMEX MX &lt;Equity&gt; <code class="terminal-command">DES</code> &lt;GO&gt;</strong> abre la descripción de Walmart de México y Centroamérica, la empresa caso del curso.</p></li>
+</ol>
+</section><section class="topic-card"><h3 class="text-71" id="buscar-una-empresa-varias-rutas"><strong>1.2 Buscar una empresa (varias rutas)</strong></h3>
+<ul>
+<li><p><strong>Ruta 1:</strong> escriban "WALMEX" y el sistema sugiere; seleccionen <strong>WALMEX MX Equity</strong>.</p></li>
+<li><p><strong>Ruta 2:</strong> &lt;EQUITY&gt; TK {nombre} &lt;GO&gt; (búsqueda de ticker).</p></li>
+<li><p><strong>Ruta 3:</strong> escriban el nombre de la empresa y &lt;<code class="terminal-command">HELP</code>&gt;, y naveguen a la categoría Companies.</p></li>
+</ul>
+<ol start="4" type="1">
+<li><p>Apunten el ticker completo (<strong>WALMEX MX</strong>) y el número de acciones en circulación (aparece en <code class="terminal-command">DES</code>; también vía Excel con el campo de shares outstanding, búsquenlo en <code class="terminal-command">FLDS</code>).</p></li>
+</ol>
+</section><section class="topic-card"><h3 class="text-71" id="funciones-importantes"><strong>1.3 Funciones importantes</strong></h3>
+<ul>
+<li><p><strong><code class="terminal-command">DES</code>:</strong> description, la ficha de la empresa (beta, market cap, acciones, índices, noticias clave).</p></li>
+<li><p><strong><code class="terminal-command">FA</code>:</strong> Financial Analysis, el corazón de los históricos.</p></li>
+<li><p><strong><code class="terminal-command">EE</code> / <code class="terminal-command">ANR</code>:</strong> estimaciones de analistas y recomendaciones / precios objetivo.</p></li>
+<li><p><strong><code class="terminal-command">BETA</code>:</strong> beta calculada con ventana y frecuencia ajustables.</p></li>
+<li><p><strong><code class="terminal-command">RV</code> / <code class="terminal-command">RVR</code>:</strong> relative valuation contra pares (múltiplos).</p></li>
+<li><p><strong><code class="terminal-command">MIPD</code>:</strong> M&amp;A, búsqueda de transacciones precedentes.</p></li>
+<li><p><strong><code class="terminal-command">ECO</code> / <code class="terminal-command">ECFC</code>/ <code class="terminal-command">ECST</code>:</strong> calendario económico y pronósticos macro.</p></li>
+<li><p><strong><code class="terminal-command">YCRV</code> / <code class="terminal-command">WB</code> / <code class="terminal-command">GGR</code>:</strong> curvas de rendimiento y bonos gubernamentales del mundo.</p></li>
+<li><p><strong><code class="terminal-command">DDIS</code> / <code class="terminal-command">YAS</code> / <code class="terminal-command">CRPR</code> / <code class="terminal-command">WCRP</code>:</strong> deuda de la empresa, rendimiento de sus bonos, ratings y spreads de crédito.</p></li>
+<li><p><strong>Excel (add-in incluido en la terminal):</strong> funciones <strong><code class="terminal-command">BDP</code></strong> (dato puntual), <strong><code class="terminal-command">BDH</code></strong> (serie histórica), <strong><code class="terminal-command">BDS</code></strong> (datos masivos) y <strong><code class="terminal-command">BQL</code></strong> (Bloomberg Query Language, el estándar moderno para consultas). Para descubrir el nombre de cualquier campo: <strong><code class="terminal-command">FLDS</code> &lt;GO&gt;</strong> desde el ticker. Ejemplo: =<code class="terminal-command">BDP</code>("WALMEX MX Equity","PX_LAST") trae el último precio.</p></li>
+<li><p><strong>Exportar:</strong> casi toda pantalla se manda a Excel con clic derecho, copiar, o el menú Output/Export de cada función.</p></li>
+</ul>
+<figure class="terminal-figure"><figcaption><strong>DES – Incluyendo acciones</strong><span>Ficha descriptiva del emisor y datos básicos de la acción.</span></figcaption><img alt="DES – Incluyendo acciones" class="terminal-shot" data-caption="DES – Incluyendo acciones" data-shot="1" loading="lazy" role="button" src="assets/media/image1.png" style="width:6.5in;height:3.52569in" tabindex="0"/></figure>
+</section><section class="topic-card"><h3 class="text-71" id="buenas-prácticas-desde-el-inicio"><strong>1.4 Buenas prácticas desde el inicio</strong></h3>
+<ul>
+<li><p>Documenten siempre: fecha de consulta, ticker, función usada y parámetros (¡la ventana de la beta y el índice elegido cambian el resultado!). En la memoria de valuación, citar "<code class="terminal-command">BETA</code> &lt;GO&gt;, 5Y mensual vs. IPC Mexicano" es una fuente; "Bloomberg" solo, no.</p></li>
+<li><p>Exporten a Excel en cuanto tengan una tabla.</p></li>
+</ul>
+<p><strong><br/>
+</strong></p>
+</section></article></section><section class="guide-page" data-guide-page="company" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Empresa, históricos y FCFF</h2><p>Comprenda el negocio y el control; después recupere, normalice y verifique los estados financieros que alimentan el modelo.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-1-perfil-de-la-empresa-objetivo"><strong>2. Paso 1: Perfil de la empresa objetivo</strong></h2><p>Antes de cualquier número, entiendan el negocio. <strong>Rutas para el caso WALMEX MX:</strong></p><ol type="1">
+<li><p><strong><code class="terminal-command">DES</code> &lt;GO&gt;:</strong> descripción, segmentos de negocio, sede, acciones, market cap, beta, miembros del índice.</p></li>
+<li><p><strong><code class="terminal-command">HH</code> &lt;GO&gt; (Hoover's):</strong> historia y descripción más narrativa del negocio.</p></li>
+<li><p><strong><code class="terminal-command">OWN</code> &lt;GO&gt;:</strong> estructura accionaria: quién controla (la participación de Walmart Inc. como controlador es clave para la discusión de M&amp;A), free float, instituciones.</p></li>
+<li><p><strong><code class="terminal-command">CAST</code> &lt;GO&gt;:</strong> capital structure: cómo está organizada la deuda del grupo (por entidad y tipo).</p></li>
+<li><p><strong><code class="terminal-command">RELS</code> &lt;GO&gt;:</strong> related securities: todos los valores vinculados a la empresa.</p></li>
+<li><p><strong><code class="terminal-command">CF</code> &lt;GO&gt;:</strong> filings, reportes trimestrales y anuales.</p></li>
+<li><p><strong><code class="terminal-command">CN</code> &lt;GO&gt;:</strong> news y research de la empresa; <strong>NSE <code class="terminal-command">MNA</code> &lt;GO&gt;</strong> filtra noticias de M&amp;A.</p></li>
+<li><p><strong><code class="terminal-command">RSKC</code> &lt;GO&gt;:</strong> riesgos de la empresa (buena fuente para la sección de riesgos de su memoria).</p></li>
+</ol><h2 class="text-29" id="paso-2-estados-financieros-históricos"><strong>3. Paso 2: Estados financieros históricos</strong></h2><p><strong>Rutas:</strong></p><ol type="1">
+<li><p><strong><code class="terminal-command">FA</code> &lt;GO&gt;</strong> (con el ticker cargado): la función central. Tiene pestañas y atajos: <strong><code class="terminal-command">FA</code> IS</strong> (estado de resultados), <strong><code class="terminal-command">FA</code> BS</strong> (balance), <strong><code class="terminal-command">FA</code> <code class="terminal-command">CF</code></strong> (flujos, con métricas de free cash flow), <strong><code class="terminal-command">FA</code> PROF</strong> (rentabilidad), y ratios por categoría (márgenes, apalancamiento, NOWC). Con el selector pidan <strong>anual, 5-10 años</strong>.</p></li>
+<li><p><strong><code class="terminal-command">FG</code> &lt;GO&gt;:</strong> fundamentals graph, series históricas de renglones financieros graficadas.</p></li>
+<li><p><strong><code class="terminal-command">CF</code> &lt;GO&gt;:</strong> reportes originales de la empresa (as reported): úsenlos para cruzar partidas específicas y partidas no recurrentes.</p></li>
+<li><p><strong><code class="terminal-command">BIO</code> / <code class="terminal-command">BI</code> &lt;GO&gt;:</strong> Bloomberg Intelligence: estudios de sector con drivers (márgenes, crecimiento de la industria).</p></li>
+</ol><p><strong>Exportación:</strong> desde <code class="terminal-command">FA</code>, menú de salida a Excel (Output).</p><figure class="terminal-figure"><figcaption><strong>FA - Activo</strong><span>Consulta de estados financieros y series históricas del activo.</span></figcaption><img alt="FA - Activo" class="terminal-shot" data-caption="FA - Activo" data-shot="2" loading="lazy" role="button" src="assets/media/image2.png" style="width:6.5in;height:3.55972in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="3" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="4" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><section class="topic-card"><h3 class="text-71" id="qué-es-importante-de-los-históricos-para-el-modelo"><strong>3.1 Qué es importante de los históricos (para el modelo)</strong></h3>
+<ul>
+<li><p>Ventas (ingreso neto) y su crecimiento año a año.</p></li>
+<li><p><strong>Margen bruto, EBITDA y EBIT</strong> (<code class="terminal-command">FA</code> reporta márgenes y EBITDA directo).</p></li>
+<li><p><strong>Costos (COGS) y Gastos (SG&amp;A),</strong> etc.</p></li>
+<li><p>Gastos de capital (CAPEX) y depreciación y amortización (D&amp;A) de <strong><code class="terminal-command">FA</code> <code class="terminal-command">CF</code></strong>.</p></li>
+<li><p><strong>Capital de trabajo:</strong> cuentas por cobrar, inventarios, cuentas por pagar (ratios de rotación en <code class="terminal-command">FA</code>). Calculen el cambio del capital de trabajo neto operativo (ΔNOWC)</p></li>
+<li><p><strong>Deuda financiera total</strong> (créditos + bonos; excluyan pasivos operativos como proveedores) y <strong>caja y equivalentes</strong> (<code class="terminal-command">FA</code> BS).</p></li>
+<li><p>Participaciones minoritarias, inversiones en asociadas, activos no operativos.</p></li>
+<li><p><strong>Tasa efectiva de impuestos</strong> de los últimos 3 años.</p></li>
+</ul>
+</section><section class="topic-card"><h3 class="text-71" id="cálculo-histórico-del-free-cash-flow-to-the-firm"><strong>3.2 Cálculo histórico del Free Cash Flow to the Firm</strong></h3>
+<p>FCFF = EBIT * (1-t) + D&amp;A - CAPEX - DeltaNOWC</p><div aria-label="FCFF = EBIT × (1 − T) + D&amp;A − CAPEX − ΔNOWC" class="equation" role="math">FCFF = EBIT × (1 − T) + D&amp;A − CAPEX − ΔNOWC</div>
+<p>Calcúlenlo para los últimos 3-5 años: les dará el punto de partida de las proyecciones y márgenes históricos de FCF (sanity check del modelo).</p>
+<p><strong>Ojo con:</strong> partidas no recurrentes (venta de activos, provisiones únicas, efectos contables de hiperinflación en algunas filiales). Ajusten y documenten cada ajuste. Bonus: <strong><code class="terminal-command">DDM</code> &lt;GO&gt;</strong> les muestra el valor por descuento de dividendos de Bloomberg, buen contraste conceptual para discutir métodos de equity.</p>
+</section></article></section><section class="guide-page" data-guide-page="macro" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Supuestos macro</h2><p>Inflación, crecimiento real, tasas de política, breakevens, forwards y consistencia entre moneda, flujos y tasa de descuento.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-3-supuestos-macro-inflación-y-crecimiento"><strong>4. Paso 3: Supuestos macro (inflación y crecimiento)</strong></h2><p><strong>Rutas:</strong></p><section class="topic-card"><h3 class="text-71" id="proyección-de-inflación"><strong>4.1 Proyección de inflación</strong></h3>
+<ul>
+<li><p><strong>Ruta 1, pronósticos de economistas: <code class="terminal-command">ECFC</code> &lt;GO&gt;</strong> (Economic Forecasts): pronósticos por país e indicador, incluida <strong>inflación (CPI)</strong> de México para los próximos años. Es el equivalente al consenso de Reuters Polls de LSEG.</p></li>
+<li><p><strong>Ruta 2, calendario: <code class="terminal-command">ECO</code> &lt;GO&gt;:</strong> calendario económico con el <strong>consenso de expectativas</strong> para cada indicador que se va a publicar (filtro país: México); útil para el corto plazo.</p></li>
+<li><p><strong>Ruta 3, estadística histórica: <code class="terminal-command">ECST</code> &lt;GO&gt;</strong> (o <code class="terminal-command">ESNP</code>): series históricas de inflación por país, para calcular promedios de largo plazo.</p></li>
+<li><p><strong>Ruta 4, inflación implícita de mercado: <code class="terminal-command">ILBE</code> &lt;GO&gt;</strong> (bonos indexados a inflación): las curvas de breakeven por país; la breakeven de México es la expectativa de inflación implícita en los Udibonos. Es la única expectativa "de mercado".</p></li>
+</ul>
+<figure class="terminal-figure"><figcaption><strong>US - ECST Fed Philadelphia y Cleveland</strong><span>Proyecciones de inflación de Estados Unidos elaboradas por la Reserva Federal de Filadelfia y la Reserva Federal de Cleveland.</span></figcaption><img alt="US - ECST Fed Philadelphia y Cleveland" class="terminal-shot" data-caption="US - ECST Fed Philadelphia y Cleveland" data-shot="5" loading="lazy" role="button" src="assets/media/image4.png" style="width:6.5in;height:3.65486in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="6" loading="lazy" role="button" src="assets/media/image5.png" style="width:6.5in;height:3.55278in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>US - Inflaciones implícitas de Breakeven</strong><span>Expectativas de inflación implícitas en instrumentos de mercado de Estados Unidos.</span></figcaption><img alt="US - Inflaciones implícitas de Breakeven" class="terminal-shot" data-caption="US - Inflaciones implícitas de Breakeven" data-shot="7" loading="lazy" role="button" src="assets/media/image6.png" style="width:6.5in;height:3.55278in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>US - SWAP de 5 años</strong><span>Expectativa de inflación obtenida del mercado de swaps a cinco años.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="8" loading="lazy" role="button" src="assets/media/image7.png" style="width:6.5in;height:3.60278in" tabindex="0"/></figure>
+<p><strong><br/>
+</strong></p>
+<figure class="terminal-figure"><figcaption><strong>US - SWAP de 10 años</strong><span>Expectativa de inflación obtenida del mercado de swaps a diez años.</span></figcaption><img alt="US - SWAP de 10 años" class="terminal-shot" data-caption="US - SWAP de 10 años" data-shot="9" loading="lazy" role="button" src="assets/media/image8.png" style="width:6.5in;height:3.55069in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>ILBE – US Breakevens a diferentes periodos</strong><span>Breakevens de inflación de Estados Unidos para distintos vencimientos.</span></figcaption><img alt="ILBE – US Breakevens a diferentes periodos" class="terminal-shot" data-caption="ILBE – US Breakevens a diferentes periodos" data-shot="10" loading="lazy" role="button" src="assets/media/image9.png" style="width:6.5in;height:3.53958in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>MEX – ECST - Banxico</strong><span>Estimaciones macroeconómicas de México y referencias de Banco de México.</span></figcaption><img alt="MEX – ECST - Banxico" class="terminal-shot" data-caption="MEX – ECST - Banxico" data-shot="11" loading="lazy" role="button" src="assets/media/image10.png" style="width:6.5in;height:3.63472in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>ILBE – MEX Breakevens a diferentes periodos</strong><span>Breakevens de inflación de México para distintos vencimientos.</span></figcaption><img alt="ILBE – MEX Breakevens a diferentes periodos" class="terminal-shot" data-caption="ILBE – MEX Breakevens a diferentes periodos" data-shot="12" loading="lazy" role="button" src="assets/media/image11.png" style="width:6.5in;height:3.55625in" tabindex="0"/></figure>
+</section><section class="topic-card"><h3 class="text-71" id="crecimiento-de-largo-plazo-para-el-valor-terminal"><strong>4.2 Crecimiento de largo plazo (para el valor terminal)</strong></h3>
+<p>Mismo flujo: <strong><code class="terminal-command">ECFC</code></strong> trae pronósticos de <strong>PIB real</strong> de México. Como referencia razonable: <strong>g de largo plazo = inflación de largo plazo esperada + crecimiento real del PIB</strong>.</p><div aria-label="g nominal de largo plazo = Inflación esperada de largo plazo + Crecimiento real del PIB" class="equation" role="math">g nominal de largo plazo = Inflación esperada de largo plazo + Crecimiento real del PIB</div>
+</section><section class="topic-card"><h3 class="text-71" id="moneda-y-tasas-de-política"><strong>4.3 Moneda y tasas de política</strong></h3>
+<ul>
+<li><p><strong><code class="terminal-command">WIRP</code> &lt;GO&gt;</strong> (World Interest Rate Probabilities): la trayectoria esperada de la tasa de política (Banxico/Fed) implícita en instrumentos de mercado: contexto de oro para discutir el nivel de tasas y el valor terminal.</p></li>
+<li><p>Si van a valuar en USD, apliquen paridad: depreciación esperada ≈ diferencia de inflaciones; los forwards del peso salen con <strong><code class="terminal-command">FXC</code> &lt;GO&gt;</strong> (spot y forwards).</p><div aria-label="Depreciación esperada ≈ Inflación local − Inflación de la moneda base" class="equation" role="math">Depreciación esperada ≈ Inflación local − Inflación de la moneda base</div></li>
+</ul>
+<p><strong><br/>
+</strong></p>
+</section></article></section><section class="guide-page" data-guide-page="wacc" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>WACC</h2><p>Construcción componente por componente de Rf, ERP, beta, costo de equity, costo de deuda, impuestos y pesos de capital.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-4-el-wacc-ingrediente-por-ingrediente"><strong>5. Paso 4: El <code class="terminal-command">WACC</code>, ingrediente por ingrediente</strong></h2><p>Fórmula objetivo:<br/>
+<br/>
+<div aria-label="WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)" class="equation" role="math">WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)</div></p><p><strong>Bloomberg:</strong> funciones dedicadas a cada pieza del costo de capital (<code class="terminal-command">CRP</code>, <code class="terminal-command">EQRP</code>, <code class="terminal-command">BETA</code>, <code class="terminal-command">WACC</code>). Úsenlas, pero <strong>construyan el suyo</strong> y usen las de la plataforma como verificación.</p><section class="topic-card"><h3 class="text-71" id="tasa-libre-de-riesgo-rf-varias-rutas"><strong>5.1 Tasa libre de riesgo (Rf), varias rutas</strong></h3>
+<ul>
+<li><p><strong>Ruta 1: <code class="terminal-command">YCRV</code> &lt;GO&gt;</strong> (yield curve analysis): seleccionen la curva gubernamental del país (US/México) y vean el rendimiento a 10 años.</p></li>
+<li><p><strong>Ruta 2: <code class="terminal-command">WB</code> &lt;GO&gt;</strong> (World Bond Markets): rendimientos soberanos de todos los países en una pantalla, con spread y desviación vs. promedio.</p></li>
+<li><p><strong>Ruta 3: <code class="terminal-command">GGR</code> &lt;GO&gt;</strong> (generic government rates): tasas genéricas de bonos y cetes por país/plazo.</p></li>
+<li><p><strong>Ruta 4: <code class="terminal-command">IYC</code> &lt;GO&gt;</strong> (international yield curves).</p></li>
+<li><p>Para flujos en USD: <strong><code class="terminal-command">GT10</code> &lt;GO&gt;</strong> (T-Note 10 años genérica).</p></li>
+</ul>
+<figure class="terminal-figure"><figcaption><strong>WB – Bond Market</strong><span>Vista general del mercado de bonos y referencias de rendimiento.</span></figcaption><img alt="WB – Bond Market" class="terminal-shot" data-caption="WB – Bond Market" data-shot="13" loading="lazy" role="button" src="assets/media/image13.png" style="width:6.5in;height:3.53958in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>SOVM – Bond Market</strong><span>Monitor de deuda soberana para comparar mercados y vencimientos.</span></figcaption><img alt="SOVM – Bond Market" class="terminal-shot" data-caption="SOVM – Bond Market" data-shot="14" loading="lazy" role="button" src="assets/media/image14.png" style="width:6.5in;height:3.54653in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>Click Ticker + GY – Gráfica de Yield</strong><span>Evolución histórica del rendimiento del instrumento seleccionado.</span></figcaption><img alt="Click Ticker + GY – Gráfica de Yield" class="terminal-shot" data-caption="Click Ticker + GY – Gráfica de Yield" data-shot="15" loading="lazy" role="button" src="assets/media/image15.png" style="width:6.5in;height:3.52917in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield</strong><span>Evolución histórica del rendimiento del Treasury de referencia.</span></figcaption><img alt="Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield" class="terminal-shot" data-caption="Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield" data-shot="16" loading="lazy" role="button" src="assets/media/image16.png" style="width:6.5in;height:3.49861in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield</strong><span>Descripción y rendimiento del bono gubernamental mexicano de referencia.</span></figcaption><img alt="Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield" class="terminal-shot" data-caption="Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield" data-shot="17" loading="lazy" role="button" src="assets/media/image17.png" style="width:6.5in;height:3.51944in" tabindex="0"/></figure>
+</section><section class="topic-card"><h3 class="text-71" id="prima-de-riesgo-de-mercado-de-país-erp-varias-rutas"><strong>5.2 Prima de riesgo de mercado / de país (ERP), varias rutas</strong></h3>
+<ul>
+<li><p><strong>Ruta 1, función de país: <code class="terminal-command">CRP</code> &lt;GO&gt;</strong> (Country Risk Premium): Bloomberg calcula la prima de riesgo por país como el retorno esperado del mercado accionario del país menos la tasa libre de riesgo local (retornos internos ponderados por capitalización del índice principal). Ahí está la prima de México y de decenas de países.</p></li>
+<li><p><strong>Ruta 2, función de empresa: &lt;EQUITY&gt; <code class="terminal-command">EQRP</code> &lt;GO&gt;:</strong> la prima de riesgo de una acción específica (equity risk premium) con supuestos mostrados.</p></li>
+<li><p><strong>Ruta 3, externas: Damodaran (NYU Stern)</strong> y <strong>Kroll</strong>: las referencias académicas/profesionales de siempre, gratuitas o públicas.</p></li>
+<li><p><strong>Ruta 4, encuestas</strong> (Fernández et al., Banxico): primas declaradas por profesionales en cada país.</p></li>
+</ul>
+<blockquote>
+<figure class="terminal-figure"><figcaption><strong>CRP</strong><span>Prima de riesgo país y sus componentes.</span></figcaption><img alt="CRP" class="terminal-shot" data-caption="CRP" data-shot="18" loading="lazy" role="button" src="assets/media/image18.png" style="width:6.22965in;height:3.41832in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="19" loading="lazy" role="button" src="assets/media/image19.png" style="width:6.24847in;height:3.40929in" tabindex="0"/></figure>
+<p><em>Cuidado con cuál es la tasa libre de riesgo base y cuál es la prima de mercado</em></p>
+<figure class="terminal-figure"><figcaption><strong>EQRP directamente del activo</strong><span>Prima de riesgo de equity consultada directamente desde la acción.</span></figcaption><img alt="EQRP directamente del activo" class="terminal-shot" data-caption="EQRP directamente del activo" data-shot="20" loading="lazy" role="button" src="assets/media/image20.png" style="width:6.28658in;height:3.42001in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>CDSW – Credit Default Swap del pais</strong><span>Spreads de CDS soberanos como referencia de riesgo crediticio del país.</span></figcaption><img alt="CDSW – Credit Default Swap del pais" class="terminal-shot" data-caption="CDSW – Credit Default Swap del pais" data-shot="21" loading="lazy" role="button" src="assets/media/image21.png" style="width:6.26939in;height:3.40597in" tabindex="0"/></figure>
+</blockquote>
+</section><section class="topic-card"><h3 class="text-71" id="beta-apalancada-β-varias-rutas"><strong>5.3 Beta apalancada (β), varias rutas</strong></h3>
+<ul>
+<li><p><strong>Ruta 1, la beta reportada: <code class="terminal-command">DES</code> &lt;GO&gt;</strong> muestra la beta (por defecto a 2 años, semanal, contra el índice local).</p></li>
+<li><p><strong>Ruta 2, la beta personalizada: &lt;EQUITY&gt; <code class="terminal-command">BETA</code> &lt;GO&gt;:</strong> regresión interactiva; cambien <strong>ventana (5 años), frecuencia (mensual) e índice de referencia</strong> (la pantalla muestra la beta ajustada y el R²: reporten ambos (beta con R² de 0.05 es ruido).</p></li>
+<li><p><strong>Ruta 3, beta sectorial:</strong> armen el universo de pares (Paso 8) y traigan la beta de cada uno con <strong><code class="terminal-command">RV</code> &lt;GO&gt;</strong> o con Excel (<code class="terminal-command">BDP</code> sobre la lista de tickers, campo de beta vía <code class="terminal-command">FLDS</code>); después desapalanquen con <strong>Hamada</strong>:<br/>
+<div aria-label="βᵤ = βₗ / [1 + (1 − T) × (D / E)]" class="equation" role="math">βᵤ = βₗ / [1 + (1 − T) × (D / E)]</div></p></li>
+</ul>
+<blockquote>
+<p><div aria-label="βₗ = βᵤ × [1 + (1 − T) × (D / E)]" class="equation" role="math">βₗ = βᵤ × [1 + (1 − T) × (D / E)]</div><br/>
+<br/>
+promedien los betas desapalancados y reapalanquen con la estructura <strong>objetiva</strong> de la empresa a valuar.</p>
+</blockquote>
+<ul>
+<li><p><strong>Ajuste de Blume (opcional):</strong> β ajustada = (2/3)·β estimada + (1/3)·1. Bloomberg lo aplica en algunas pantallas (la "adjusted beta").</p><div aria-label="β ajustada = (2 / 3) × β estimada + (1 / 3) × 1" class="equation" role="math">β ajustada = (2 / 3) × β estimada + (1 / 3) × 1</div></li>
+</ul>
+<figure class="terminal-figure"><figcaption><strong>Ticker (WALMEX) + BETA</strong><span>Estimación de beta de WALMEX con parámetros configurables.</span></figcaption><img alt="Ticker (WALMEX) + BETA" class="terminal-shot" data-caption="Ticker (WALMEX) + BETA" data-shot="22" loading="lazy" role="button" src="assets/media/image24.png" style="width:6.5in;height:3.52292in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>RV – Mercados – Beta</strong><span>Beta y métricas de mercado de empresas comparables.</span></figcaption><img alt="RV – Mercados – Beta" class="terminal-shot" data-caption="RV – Mercados – Beta" data-shot="23" loading="lazy" role="button" src="assets/media/image25.png" style="width:6.5in;height:3.55in" tabindex="0"/></figure>
+</section><section class="topic-card"><h3 class="text-71" id="costo-de-equity-ke-modelo-capm"><strong>5.4 Costo de equity (Ke), modelo CAPM</strong></h3>
+<p><div aria-label="kₑ = R𝒻 + βₗ × ERP" class="equation" role="math">kₑ = R𝒻 + βₗ × ERP</div><br/>
+Contraste: <code class="terminal-command">EQRP</code> da una estimación de Ke-ERP de Bloomberg para la acción; si su CAPM difiere mucho, revisen beta y prima.</p>
+</section><section class="topic-card"><h3 class="text-71" id="costo-de-deuda-kd-varias-rutas"><strong>5.5 Costo de deuda (Kd), varias rutas</strong></h3>
+<ul>
+<li><p><strong>Ruta 1, bonos de la empresa (la mejor si existen): &lt;CORP&gt; sobre WALMEX MX</strong> abre la lista de bonos del emisor. Sobre el bono relevante: <strong><code class="terminal-command">DES</code></strong> (ficha), <strong><code class="terminal-command">YAS</code> &lt;GO&gt;</strong> (yield and spread: rendimiento al vencimiento, spread contra la curva, duration), <strong><code class="terminal-command">DDIS</code> &lt;GO&gt;</strong> (distribución de vencimientos de toda la deuda del emisor), <strong><code class="terminal-command">CAST</code> &lt;GO&gt;</strong> (estructura de capital por entidad). Tomen el YTM del bono de mayor plazo y liquidez en la moneda de sus flujos: ese es el Kd de mercado.</p></li>
+<li><p><strong>Ruta 2, rating + spread sintético: <code class="terminal-command">CRPR</code> &lt;GO&gt;</strong> (ratings del emisor, historia y escala de las tres agencias) y <strong><code class="terminal-command">WCRP</code> &lt;GO&gt;</strong> (World Credit Risk Premiums: spreads de crédito por rating, sector y región). Kd ≈ Rf + spread del rating de su empresa.</p><div aria-label="k𝒹 ≈ R𝒻 + Spread de crédito del rating" class="equation" role="math">k𝒹 ≈ R𝒻 + Spread de crédito del rating</div></li>
+<li><p><strong>Ruta 3, comparables de deuda: <code class="terminal-command">SRCH</code> &lt;GO&gt;</strong> (bond search): screenen bonos del mismo sector/país; <strong><code class="terminal-command">FMCI</code>/<code class="terminal-command">FMC</code> &lt;GO&gt;</strong>: curvas de mercado justas por sector y rating.</p></li>
+<li><p><strong>Ruta 4, CDS: <code class="terminal-command">CDSW</code> &lt;GO&gt;</strong> sobre el emisor: el spread del swap de incumplimiento a 5 años es el termómetro del costo de crédito</p></li>
+<li><p><strong>Ruta 5, riesgo de default: <code class="terminal-command">DRSK</code> &lt;GO&gt;:</strong> probabilidad de default a 12 meses y escala implícita de rating, otro lente del costo de crédito.<br/>
+Kd después de impuestos = Kd × (1 − t), con t la tasa marginal de la empresa.</p></li>
+</ul>
+<figure class="terminal-figure"><figcaption><strong>Activo – DDIS</strong><span>Distribución de vencimientos y composición de la deuda.</span></figcaption><img alt="Activo – DDIS" class="terminal-shot" data-caption="Activo – DDIS" data-shot="24" loading="lazy" role="button" src="assets/media/image27.png" style="width:6.5in;height:3.52292in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>CRPR – Credit Profile</strong><span>Perfil crediticio, calificaciones y spreads relevantes.</span></figcaption><img alt="CRPR – Credit Profile" class="terminal-shot" data-caption="CRPR – Credit Profile" data-shot="25" loading="lazy" role="button" src="assets/media/image28.png" style="width:6.5in;height:3.56042in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>DRSK – Default Risk</strong><span>Indicadores de riesgo de incumplimiento del emisor.</span></figcaption><img alt="DRSK – Default Risk" class="terminal-shot" data-caption="DRSK – Default Risk" data-shot="26" loading="lazy" role="button" src="assets/media/image28.png" style="width:6.5in;height:3.56042in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>MIPD – Modelo de probabilidad implícita de impago</strong><span>Probabilidad implícita de incumplimiento estimada por Bloomberg.</span></figcaption><img alt="MIDP – Modelo de probabilidad implícita de impago" class="terminal-shot" data-caption="MIDP – Modelo de probabilidad implícita de impago" data-shot="27" loading="lazy" role="button" src="assets/media/image29.png" style="width:6.5in;height:3.41458in" tabindex="0"/></figure>
+<figure class="terminal-figure"><figcaption><strong>KPMG Corporate Tax Survey</strong><span>Referencia externa para contrastar tasas corporativas por jurisdicción.</span></figcaption><img alt="KPMG Corporate Tax Survey" class="terminal-shot" data-caption="KPMG Corporate Tax Survey" data-shot="28" loading="lazy" role="button" src="assets/media/image30.png" style="width:6.5in;height:3.59375in" tabindex="0"/></figure>
+</section><section class="topic-card"><h3 class="text-71" id="pesos-de-capital-e-y-d"><strong>5.6 Pesos de capital (E y D)</strong></h3>
+<ul>
+<li><p><strong>E:</strong> capitalización de mercado del <code class="terminal-command">DES</code> (precio × acciones; también CUR_MKT_CAP en Excel).</p></li>
+<li><p><strong>D:</strong> deuda financiera total (<code class="terminal-command">FA</code> BS; y detalle en <code class="terminal-command">DDIS</code>/<code class="terminal-command">CAST</code>: bonos + créditos + arrendamientos si aplican).</p></li>
+<li><p>Pesos con la estructura <strong>objetivo</strong> si la empresa está migrando de apalancamiento; si no, la actual es razonable.</p></li>
+<li><p>Convención de clase: incluyan arrendamientos como deuda o ajusten los flujos, pero no ambas cosas a la vez.</p></li>
+</ul>
+</section><section class="topic-card"><h3 class="text-71" id="verificación-cruzada-la-función-wacc"><strong>5.7 Verificación cruzada: la función <code class="terminal-command">WACC</code></strong></h3>
+<ul>
+<li><p><strong>&lt;EQUITY&gt; <code class="terminal-command">WACC</code> &lt;GO&gt;:</strong> Bloomberg calcula el costo de capital de la empresa con sus supuestos (estructura, costo de deuda, prima de riesgo, tasa marginal). Úsenla como <strong>referencia de sanidad</strong> y lean sus supuestos (cada componente es clicable).</p></li>
+</ul>
+<blockquote>
+<figure class="terminal-figure"><figcaption><strong>WACC</strong><span>Verificación del costo promedio ponderado de capital calculado por Bloomberg.</span></figcaption><img alt="WACC" class="terminal-shot" data-caption="WACC" data-shot="29" loading="lazy" role="button" src="assets/media/image31.png" style="width:6.20075in;height:3.37663in" tabindex="0"/></figure>
+</blockquote>
+<p><strong><br/>
+</strong></p>
+</section></article></section><section class="guide-page" data-guide-page="forecast" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Proyecciones, DCF y sensibilidad</h2><p>Consenso, guía del management, valor terminal, EV, equity bridge, valor por acción y sensibilidad de dos vías.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-5-proyecciones-de-flujos-de-efectivo"><strong>6. Paso 5: Proyecciones de flujos de efectivo</strong></h2><section class="topic-card"><h3 class="text-71" id="qué-hay-disponible-de-expectativas-del-mercado-varias-rutas"><strong>6.1 ¿Qué hay disponible de expectativas del mercado? (varias rutas)</strong></h3>
+<ul>
+<li><p><strong><code class="terminal-command">EE</code> &lt;GO&gt;</strong> (Earnings Estimates): el consenso de analistas para ventas, EBITDA, EBIT, EPS, utilidad, dividendos, por ejercicio fiscal (1-4 años adelante), con número de analistas, máximos/mínimos e historia de revisiones.</p></li>
+<li><p><strong><code class="terminal-command">EEG</code> &lt;GO&gt;:</strong> las mismas estimaciones en gráfica (histórico vs. proyección).</p></li>
+<li><p><strong><code class="terminal-command">EA</code> &lt;GO&gt;</strong> (Earnings Analysis): análisis de resultados vs. expectativas; <strong><code class="terminal-command">SURP</code> &lt;GO&gt;:</strong> historial de sorpresas (qué tan seguido la empresa bate o falla el consenso, calibración de confianza).</p></li>
+<li><p><strong><code class="terminal-command">ANR</code> &lt;GO&gt;:</strong> recomendaciones y <strong>precios objetivo</strong> de los analistas, con el consenso de rating.</p></li>
+<li><p><strong><code class="terminal-command">BRC</code> &lt;GO&gt;:</strong> reportes de research de brokers sobre la empresa (si su licencia los incluye).</p></li>
+<li><p><strong><code class="terminal-command">BI</code> &lt;GO&gt;:</strong> Bloomberg Intelligence, estudios de sector con proyecciones de la industria (crecimiento del retail en México, márgenes esperados).</p></li>
+<li><p>Guía del management: en <strong><code class="terminal-command">CF</code> &lt;GO&gt;</strong> (filings) y <strong><code class="terminal-command">CN</code> &lt;GO&gt;</strong> encuentren reportes trimestrales y anuncios; las llamadas de resultados se siguen desde <strong><code class="terminal-command">EVT</code> &lt;GO&gt;</strong> (eventos) y noticias.</p></li>
+</ul>
+<blockquote>
+<figure class="terminal-figure"><figcaption><strong>EE</strong><span>Consenso de estimaciones financieras y operativas de analistas.</span></figcaption><img alt="EE" class="terminal-shot" data-caption="EE" data-shot="30" loading="lazy" role="button" src="assets/media/image32.png" style="width:6.2774in;height:3.41837in" tabindex="0"/></figure>
+</blockquote>
+</section><section class="topic-card"><h3 class="text-71" id="valor-terminal"><strong>6.3 Valor terminal</strong></h3>
+<p><strong>Método de Gordon (crecimiento perpetuo):</strong><br/>
+<br/>
+<div aria-label="VTₙ = FCFFₙ₊₁ / (WACC − g) = FCFFₙ × (1 + g) / (WACC − g)" class="equation" role="math">VTₙ = FCFFₙ₊₁ / (WACC − g) = FCFFₙ × (1 + g) / (WACC − g)</div><br/>
+con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempre g &lt; <code class="terminal-command">WACC</code>.</p>
+<p><strong>Método de múltiplo de salida:</strong> VT = EBITDA final × múltiplo de salida (el promedio de múltiplos actuales del sector, del Paso 7, ajustado por ciclo).</p><div aria-label="VT = EBITDA final × Múltiplo de salida" class="equation" role="math">VT = EBITDA final × Múltiplo de salida</div>
+<p>Hagan ambos y comparen: si difieren mucho, algo está fuera de lugar. Un valor terminal que representa más del 75-80% del valor total sugiere un horizonte explícito demasiado corto o supuestos agresivos.</p>
+</section><h2 class="text-29" id="paso-6-del-valor-presente-al-valor-por-acción"><strong>7. Paso 6: Del valor presente al valor por acción</strong></h2><ol type="1">
+<li><p><strong>EV =</strong> Σ FCFF descontados a <code class="terminal-command">WACC</code> + VT descontada.</p><div aria-label="EV = Σ [FCFFₜ / (1 + WACC)ᵗ] + [VTₙ / (1 + WACC)ⁿ]" class="equation" role="math">EV = Σ [FCFFₜ / (1 + WACC)ᵗ] + [VTₙ / (1 + WACC)ⁿ]</div></li>
+<li><p><strong>Puente al valor de equity (equity bridge):</strong></p>
+<ul>
+<li><p>EV</p></li>
+<li><p>− deuda financiera neta (deuda total − caja no operativa)</p></li>
+<li><p>− participaciones minoritarias (a valor de mercado si se conoce, en libros como proxy)</p>
+<ul>
+<li><p>inversiones en asociadas y otros activos no operativos</p></li>
+</ul></li>
+<li><p>= <strong>Valor de equity</strong></p></li>
+</ul></li>
+<li><p><strong>Valor por acción</strong> = Valor de equity / acciones en circulación (<code class="terminal-command">DES</code>).</p><div aria-label="Valor por acción = Valor de equity / Acciones en circulación" class="equation" role="math">Valor por acción = Valor de equity / Acciones en circulación</div></li>
+<li><p>Comparen contra el precio de mercado: si su valor es muy distinto, expliquen por qué (¡ese es el análisis!).</p></li>
+</ol><section class="topic-card"><h3 class="text-71" id="análisis-de-sensibilidad"><strong>7.1 Análisis de sensibilidad</strong> </h3>
+<p>Tabla de dos vías en Excel: <strong><code class="terminal-command">WACC</code> (±1.0 pp en pasos de 0.5) contra g (±0.5 pp en pasos de 0.25)</strong>, mostrando el valor por acción. Monte la tabla con funciones <code class="terminal-command">BDP</code>/<code class="terminal-command">BDH</code> para los insumos de mercado y sus propios supuestos para el resto. Es la mejor defensa contra la falsa precisión y una excelente base de discusión del rango de negociación en M&amp;A.</p>
+<p><strong><br/>
+</strong></p>
+</section></article></section><section class="guide-page" data-guide-page="comps" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Comparables</h2><p>Selección de peers, múltiplos trailing y forward, diagnóstico de outliers e imputación de valor.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-7-valuación-por-múltiplos-de-comparables"><strong>8. Paso 7: Valuación por múltiplos de comparables</strong></h2><section class="topic-card"><h3 class="text-71" id="armar-el-universo-de-comparables-varias-rutas"><strong>8.1 Armar el universo de comparables (varias rutas)</strong></h3>
+<ul>
+<li><p><strong>Ruta 1, comparables de la plataforma: <code class="terminal-command">RV</code> &lt;GO&gt;</strong> (Relative Value): la empresa contra un grupo de pares definido por Bloomberg o por ustedes; pestañas de múltiplos (EV/EBITDA, EV/EBIT, P/E, forward y trailing), ratios financieros y retornos. Pueden <strong>editar el peer group</strong> (agregar Soriana, Chedraui, retailers regionales) y guardar su grupo.</p></li>
+<li><p><strong>Ruta 2, screening propio: <code class="terminal-command">EQS</code> &lt;GO&gt;</strong> (Equity Search): screen de empresas por industria, país, tamaño; exporten la lista y tráiganla a <code class="terminal-command">RV</code> como peer group custom.</p></li>
+<li><p><strong>Ruta 3, ranking: <code class="terminal-command">RVR</code> &lt;GO&gt;</strong> (Relative Value Ranking): ranking de la empresa vs. el promedio del grupo en variables contables y de valuación; rápido para detectar outliers.</p></li>
+<li><p><strong>Ruta 4, contexto global: <code class="terminal-command">WPE</code> &lt;GO&gt;</strong> (World P/E): P/E de los índices accionarios del mundo; útil para contextualizar a México vs. otras regiones en la discusión de prima de riesgo.</p></li>
+</ul>
+<blockquote>
+<figure class="terminal-figure"><figcaption><strong>RV</strong><span>Múltiplos de valuación y métricas de mercado frente a pares.</span></figcaption><img alt="RV" class="terminal-shot" data-caption="RV" data-shot="31" loading="lazy" role="button" src="assets/media/image34.png" style="width:6.20644in;height:3.21793in" tabindex="0"/></figure>
+<p><em>Parámetros para agregar múltiplos de ingresos</em></p>
+</blockquote>
+</section><section class="topic-card"><h3 class="text-71" id="múltiplos-a-calcular"><strong>8.2 Múltiplos a calcular</strong></h3>
+<ul>
+<li><p><strong>EV/EBITDA</strong> (el rey en M&amp;A), <strong>EV/EBIT</strong>, <strong>EV/Ventas</strong>, <strong>P/E</strong>, <strong>P/FCFF</strong>.</p></li>
+<li><p><strong>Forward:</strong> con las estimaciones del próximo ejercicio de <code class="terminal-command">EE</code> (<code class="terminal-command">RV</code> los trae con la columna forward); <strong>trailing:</strong> con los últimos 12 meses.</p></li>
+<li><p>EV de cada comparable = capitalización de mercado + deuda financiera total − caja y equivalentes (todo de <code class="terminal-command">DES</code>/<code class="terminal-command">FA</code>, o directamente los campos de EV en <code class="terminal-command">RV</code>/Excel).</p></li>
+</ul>
+</section><section class="topic-card"><h3 class="text-71" id="lectura-profesional-de-los-múltiplos"><strong>8.3 Lectura profesional de los múltiplos</strong></h3>
+<ol type="1">
+<li><p>Reporten <strong>mediana</strong> y rango (la media se contamina por outliers).</p></li>
+<li><p>Extremos: el comparable con EV/EBITDA de 3x o de 25x, ¿por qué? (apalancamiento, crecimiento, margen, ciclo).</p></li>
+<li><p>Ubiquen a su empresa: el múltiplo que "merece" depende de <strong>crecimiento, rentabilidad y riesgo</strong> vs. los pares. Hagan el scatter de múltiplo vs. crecimiento esperado en Excel (crecimiento de <code class="terminal-command">EE</code>).</p></li>
+<li><p>Imputen el valor: EV objetivo = EBITDA de su empresa × múltiplo mediana (o rango), y de ahí al equity bridge del Paso 6.</p><div aria-label="EV objetivo = EBITDA de la empresa × Múltiplo mediano" class="equation" role="math">EV objetivo = EBITDA de la empresa × Múltiplo mediano</div></li>
+</ol>
+</section></article></section><section class="guide-page" data-guide-page="precedents" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Transacciones precedentes</h2><p>Búsqueda de deals, filtros, múltiplos, primas pagadas, contexto de mercado y ajustes de comparabilidad.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-8-transacciones-precedentes"><strong>9. Paso 8: Transacciones precedentes</strong></h2><p><strong><code class="terminal-command">MA</code> &lt;GO&gt;</strong> es la función central de M&amp;A de Bloomberg: cobertura global desde 1997, pública y privada, con valores, términos, <strong>primas</strong>, asesores y estados financieros al momento del deal.</p><section class="topic-card"><h3 class="text-71" id="pantalla-de-búsqueda-de-transacciones"><strong>9.1 Pantalla de búsqueda de transacciones</strong></h3>
+<ol type="1">
+<li><p><strong><code class="terminal-command">MA</code> &lt;GO&gt;</strong>, luego <strong>Advanced Search</strong>. Filtros sugeridos (equivalentes a los de las otras guías):</p>
+<ul>
+<li><p><strong>Deal Criteria:</strong> tipo de transacción (adquisiciones de mayoría; definan % adquirido ≥ 50%), deal status (Completed), <strong>Date Range</strong> (anuncio: últimos 5-8 años);</p></li>
+<li><p><strong>Company Universe:SIC Code / industria del target</strong> (retail: SIC 53xx, o el equivalente de su sector), geografía del target, <strong>Public/Private</strong>, tamaño del deal;</p></li>
+<li><p><strong>Acquisition Criteria / Advisors:</strong> tipo de adquirente (estratégico vs. patrimonial/PE), forma de pago.</p></li>
+</ul></li>
+<li><p><strong>Edit Columns:</strong> agreguen columnas de valor (deal value, EV), <strong>primas (1 día, 4 semanas, 52 semanas)</strong> y múltiplos/estados financieros del target al anuncio (EV/EBITDA, EV/Ventas cuando están revelados).</p></li>
+<li><p><strong>Results / Deal List:</strong> exporten a Excel (Actions, Output to Excel).</p></li>
+<li><p><strong>Truco:</strong> pueden ver el perfil completo de cada deal (timeline, términos, financieras al anuncio): úsenlo para recalcular múltiplos con EBITDA LTM al cierre del anuncio, no solo el reportado.</p></li>
+</ol>
+<blockquote>
+
+<figure class="terminal-figure"><figcaption><strong>MA – Desglose de Deals (Búsqueda para comparabilidad)</strong><span>Desglose de transacciones para filtrar operaciones comparables.</span></figcaption><img alt="MA – Desglose de Deals (Búsqueda para comparabilidad)" class="terminal-shot" data-caption="MA – Desglose de Deals (Búsqueda para comparabilidad)" data-shot="32" loading="lazy" role="button" src="assets/media/image35.png" style="width:6.30065in;height:3.41487in" tabindex="0"/></figure>
+</blockquote>
+<p><strong><br/>
+</strong></p>
+<blockquote>
+<figure class="terminal-figure"><figcaption><strong>Lista de Deals</strong><span>Transacciones seleccionadas para el análisis de precedentes.</span></figcaption><img alt="Lista de Deals" class="terminal-shot" data-caption="Lista de Deals" data-shot="33" loading="lazy" role="button" src="assets/media/image36.png" style="width:6.32682in;height:3.44596in" tabindex="0"/></figure>
+</blockquote>
+</section><section class="topic-card"><h3 class="text-71" id="múltiplos-y-primas-de-las-transacciones"><strong>9.2 Múltiplos y primas de las transacciones</strong></h3>
+<ul>
+<li><p>Donde el target sea público o haya datos revelados: <strong>EV/EBITDA y EV/Ventas pagados</strong> por transacción.</p></li>
+<li><p>Si el target es privado sin datos revelados: análisis de <strong>primas</strong> (1D, 4W, 52W): prima mediana sobre el precio previo al anuncio. Esa prima es el insumo directo para discutir el <strong>control premium</strong> en la negociación.</p></li>
+</ul>
+</section><section class="topic-card"><h3 class="text-71" id="del-lado-de-la-empresa-y-del-mercado-rutas-complementarias"><strong>9.3 Del lado de la empresa y del mercado (rutas complementarias)</strong></h3>
+<ul>
+<li><p><strong>Busquen por empresa en la pantalla principal de <code class="terminal-command">MA</code>:</strong> escriban WALMEX en el buscador de <code class="terminal-command">MA</code> y vean todas las transacciones donde la empresa ha sido compradora o vendedora (su historia de consolidación en México y Centroamérica es buen material de clase).</p></li>
+<li><p><strong><code class="terminal-command">MNA</code> &lt;GO&gt;:</strong> estadísticas de M&amp;A por país, sector y periodo (¿a qué múltiplos se está pagando en el ciclo actual?).</p></li>
+<li><p><strong><code class="terminal-command">LEAG</code> &lt;GO&gt;:</strong> league tables de asesores y underwriters: útil en el curso para discutir el proceso de venta (¿qué bancos están activos en retail en LATAM?).</p></li>
+<li><p><strong>NSE <code class="terminal-command">MNA</code> &lt;GO&gt;:</strong> noticias de M&amp;A (rumores y anuncios del sector).</p></li>
+</ul>
+</section><section class="topic-card"><h3 class="text-71" id="ajustes-de-criterio"><strong>9.4 Ajustes de criterio</strong> </h3>
+<ul>
+<li><p><strong>Antigüedad y ciclo:</strong> una transacción de 2021 (tasas a cero, múltiplos inflados) no vale lo mismo que una de 2024.</p></li>
+<li><p><strong>Tipo de comprador:</strong> los fondos de PE suelen pagar múltiplos distintos que los compradores estratégicos (sinergias).</p></li>
+<li><p><strong>Sinergias:</strong> los múltiplos precedentes incluyen el pago por sinergias esperadas del comprador de turno, no las de su cliente.</p></li>
+<li><p><strong>Tamaño y liquidez:</strong> transacciones de targets pequeños cotizan con descuento.</p></li>
+<li><p><strong>Limitante honesta:</strong> la cobertura de Bloomberg es más débil en targets privados pequeños que la de Capital IQ; si su muestra viene muy corta, declárenlo y amplíen geografía o periodo.</p></li>
+</ul>
+<p><strong><br/>
+</strong></p>
+</section></article></section><section class="guide-page" data-guide-page="appendix" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Cheat sheet y fuentes</h2><p>Referencia rápida de funciones Bloomberg y fuentes externas complementarias.</p></div><article class="content-card guide-content"><h2 class="text-29" id="apéndice-a-hoja-de-funciones-usadas-en-la-guía-cheat-sheet"><strong>Apéndice A: hoja de funciones usadas en la guía (cheat sheet)</strong></h2><table>
+<colgroup>
+<col style="width: 38%"/>
+<col style="width: 55%"/>
+<col style="width: 6%"/>
+</colgroup>
+<thead>
+<tr>
+<th><strong>Función</strong></th>
+<th><strong>Qué da</strong></th>
+<th><strong>Etapa</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="terminal-command">DES</code></td>
+<td>Ficha de la empresa: beta, market cap, acciones</td>
+<td>1, 4</td>
+</tr>
+<tr>
+<td><code class="terminal-command">HH</code>, <code class="terminal-command">RSKC</code>, <code class="terminal-command">CAST</code>, <code class="terminal-command">RELS</code>, <code class="terminal-command">OWN</code></td>
+<td>Historia, riesgos, estructura de capital y de grupo</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code class="terminal-command">CF</code>, <code class="terminal-command">CN</code>, NSE <code class="terminal-command">MNA</code></td>
+<td>Filings, noticias de la empresa, noticias de M&amp;A</td>
+<td>1, 5, 8</td>
+</tr>
+<tr>
+<td><code class="terminal-command">FA</code> (IS/BS/<code class="terminal-command">CF</code>/PROF), <code class="terminal-command">FG</code>, <code class="terminal-command">BI</code></td>
+<td>Estados financieros, series, inteligencia de sector</td>
+<td>2, 5</td>
+</tr>
+<tr>
+<td><code class="terminal-command">ECFC</code>, <code class="terminal-command">ECO</code>, <code class="terminal-command">ECST</code>, <code class="terminal-command">WIRP</code>, <code class="terminal-command">ILBE</code>, <code class="terminal-command">FXC</code></td>
+<td>Pronósticos macro, calendario, series, tasas de política, breakevens, forwards</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code class="terminal-command">YCRV</code>, <code class="terminal-command">WB</code>, <code class="terminal-command">GGR</code>, <code class="terminal-command">IYC</code>, <code class="terminal-command">GT10</code></td>
+<td>Curvas y rendimientos gubernamentales</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code class="terminal-command">CRP</code>, <code class="terminal-command">EQRP</code></td>
+<td>Prima de riesgo de país y de la acción</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code class="terminal-command">BETA</code>, <code class="terminal-command">EQS</code> (betas en lote vía <code class="terminal-command">RV</code>/Excel)</td>
+<td>Beta personalizada y de pares</td>
+<td>4, 8</td>
+</tr>
+<tr>
+<td><code class="terminal-command">YAS</code></td>
+<td>Bonos del emisor, YTM, vencimientos</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code class="terminal-command">CRPR</code>, RATC, <code class="terminal-command">WCRP</code>, <code class="terminal-command">CDSW</code>, <code class="terminal-command">DRSK</code>, <code class="terminal-command">SRCH</code>, <code class="terminal-command">FMC</code></td>
+<td>Ratings, spreads por rating, CDS, riesgo de default</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code class="terminal-command">WACC</code>, <code class="terminal-command">DDM</code></td>
+<td><code class="terminal-command">WACC</code> y valor por dividendos de Bloomberg (verificación)</td>
+<td>4, 6</td>
+</tr>
+<tr>
+<td><code class="terminal-command">EE</code>, <code class="terminal-command">EEG</code>, <code class="terminal-command">EA</code>, <code class="terminal-command">SURP</code>, <code class="terminal-command">ANR</code>, <code class="terminal-command">BRC</code></td>
+<td>Consenso, gráfica, resultados, sorpresas, precios objetivo, research</td>
+<td>5, 10</td>
+</tr>
+<tr>
+<td><code class="terminal-command">RV</code>, <code class="terminal-command">RVR</code>, <code class="terminal-command">EQS</code>, <code class="terminal-command">WPE</code></td>
+<td>Múltiplos vs. pares, ranking, screening, P/E global</td>
+<td>7</td>
+</tr>
+<tr>
+<td><code class="terminal-command">MIPD</code>, <code class="terminal-command">MNA</code>, <code class="terminal-command">LEAG</code></td>
+<td>Precedentes, estadísticas, league tables</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code class="terminal-command">GP</code>, <code class="terminal-command">HP</code>, <code class="terminal-command">EVT</code></td>
+<td>Gráficas de precio, tabla histórica, eventos</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code class="terminal-command">FLDS</code>, <code class="terminal-command">BDP</code>, <code class="terminal-command">BDH</code>, <code class="terminal-command">BDS</code>, <code class="terminal-command">BQL</code>, <code class="terminal-command">HELP</code> <code class="terminal-command">HELP</code></td>
+<td>Campos en Excel, extracción, ayuda 24/7</td>
+<td>Todas</td>
+</tr>
+</tbody>
+</table><h2 class="text-29" id="apéndice-b-fuentes-externas-complementarias"><strong>14. Apéndice B: fuentes externas complementarias</strong></h2><ul>
+<li><p><strong>Aswath Damodaran (NYU Stern):</strong> primas de riesgo de mercado y por país actualizadas cada mes, gratuitas en su página de NYU; lectura obligatoria para <code class="terminal-command">WACC</code> y valor terminal.</p></li>
+<li><p><strong>Kroll (antes Duff &amp; Phelps):</strong> publicaciones de costo de capital y prima de riesgo de referencia profesional.</p></li>
+<li><p><strong>Banxico, Encuesta de Expectativas:</strong> el pronóstico de inflación y crecimiento de los especialistas en México, gratuito, ideal para contrastar contra <code class="terminal-command">ECFC</code>/<code class="terminal-command">CRP</code>.</p></li>
+<li><p><strong>BMC (Bloomberg Market Concepts) y BU &lt;GO&gt;:</strong> capacitación y certificación oficial para estudiantes.</p></li>
+<li><p><strong>Documentos de la empresa:</strong> reporte trimestral de WALMEX y anuncios (<code class="terminal-command">CF</code>/<code class="terminal-command">CN</code>): para contrastar el consenso con la guía del management.</p></li>
+</ul></article></section></main>
+<div aria-label="Captura ampliada" aria-modal="true" class="lightbox" hidden="" id="lightbox" role="dialog"><button aria-label="Cerrar" id="lightboxClose" type="button">×</button><img alt="" id="lightboxImage"/><p id="lightboxCaption"></p></div>
+<footer><div><strong>MAF · Fusiones y Adquisiciones · Guía de valuación utilizando Bloomberg</strong><span>EGADE Business School · Prof. Dr. Jonas Lucio Maia</span></div><div class="footer-disclaimer-block"><p>Guía elaborada con apoyo de herramientas de inteligencia artificial exclusivamente para fines académicos y docentes. Las cifras, casos y ejemplos presentados tienen carácter meramente ilustrativo y se incluyen únicamente como referencia, por lo que no deben interpretarse como datos reales ni como recomendaciones de inversión. Las funciones y rutas de Bloomberg Terminal fueron contrastadas con documentación pública y guías de bibliotecas académicas disponibles a noviembre de 2026. Dado que la plataforma se actualiza periódicamente, se recomienda utilizar &lt;HELP&gt; en cada pantalla para confirmar la funcionalidad y el procedimiento vigentes. WALMEX fue seleccionada exclusivamente con fines académicos, debido a la buena disponibilidad pública de información y a características que resultan útiles para el aprendizaje de valuación. Su inclusión no constituye una recomendación de inversión, compra, venta o mantenimiento de valores, ni implica acceso a información privada, confidencial o distinta de aquella disponible públicamente.</p><p class="footer-contact">Para cualquier corrección, sugerencia o ajuste, agradeceremos reportarlo a <a href="mailto:jonas.maia@tec.mx">jonas.maia@tec.mx</a></p></div></footer><script src="app.js"></script></body></html>
