@@ -151,3 +151,35 @@ footer{align-items:start;}
 @media(max-width:850px){
   .guide-page>.page-hero{min-height:0;}
 }
+
+
+/* Sidebar-only fork: contextual section index added to the stable v12. */
+@media (min-width: 901px){
+  main > .guide-page{display:grid;grid-template-columns:270px minmax(0,1fr);column-gap:24px;align-items:start}
+  main > .guide-page > .page-hero{grid-column:1;grid-row:1 / span 200;align-self:start;position:sticky;top:64px;margin:0;padding:24px 20px;border:0;border-left:5px solid var(--blue);border-radius:0;background:#edf3ff;box-shadow:none;min-height:0}
+  main > .guide-page > :not(.page-hero){grid-column:2}
+}
+.context-toc{margin-top:24px;border-top:1px solid rgba(18,57,112,.18);padding-top:15px}
+.context-toc-label{font-size:.68rem;letter-spacing:.13em;font-weight:900;color:#5470a0;margin:0 0 9px;text-transform:uppercase}
+.context-toc ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.context-toc li{margin:0}
+.context-toc a{display:block;padding:7px 8px;border-radius:7px;color:#173462;text-decoration:none;font-size:.8rem;line-height:1.28}
+.context-toc a:hover,.context-toc a:focus-visible{background:#dce7ff;color:#173f92;outline:none}
+.context-toc .toc-sub a{padding-left:18px;font-size:.75rem;color:#536585}
+@media (max-width:900px){
+  main > .guide-page{display:block}
+  main > .guide-page > .page-hero{position:static;margin:0 0 14px;padding:18px 20px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;background:linear-gradient(135deg,#edf3ff,#fff)}
+  .context-toc{display:none}
+}
+
+
+/* v2 layout fix: use an explicit content wrapper so the sidebar cannot create empty grid rows. */
+@media (min-width:901px){
+  main > .guide-page{display:grid;grid-template-columns:270px minmax(0,1fr);gap:24px;align-items:start}
+  main > .guide-page > .page-hero{grid-column:1;grid-row:1;align-self:start;position:sticky;top:64px;margin:0;padding:24px 20px;border:0;border-left:5px solid var(--blue);border-radius:0;background:#edf3ff;box-shadow:none;min-height:0}
+  main > .guide-page > .page-main-content{grid-column:2;grid-row:1;min-width:0}
+}
+@media (max-width:900px){
+  main > .guide-page{display:block}
+  main > .guide-page > .page-main-content{display:block}
+}

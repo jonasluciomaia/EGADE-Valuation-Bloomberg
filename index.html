@@ -1,8 +1,193 @@
 <!DOCTYPE html>
 
-<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Guía de Valuación con Bloomberg</title><link href="styles.css" rel="stylesheet"/></head><body>
-<header><div><p class="eyebrow light">MAF - Fusiones y Adquisiciones</p><h1>Guía de valuación utilizando Bloomberg</h1><p>Curso: Fusiones y Adquisiciones, MAF Maestría en Finanzas · Prof. Dr. Jonas Lucio Maia</p></div><div class="header-note"><strong>Bloomberg Terminal</strong><span>DCF · Comparables · Precedentes</span></div></header>
-<nav aria-label="Secciones de la guía" class="guide-nav"><button data-page="overview" type="button">Mapa y ruta de trabajo</button><button data-page="terminal" type="button">Primeros pasos en Bloomberg</button><button data-page="company" type="button">Empresa, históricos y FCFF</button><button data-page="macro" type="button">Supuestos macro</button><button data-page="wacc" type="button">WACC</button><button data-page="forecast" type="button">Proyecciones, DCF y sensibilidad</button><button data-page="comps" type="button">Comparables</button><button data-page="precedents" type="button">Transacciones precedentes</button><button data-page="appendix" type="button">Cheat sheet y fuentes</button></nav><main><section class="guide-page" data-guide-page="overview" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Mapa y ruta de trabajo</h2><p>Panorama de las etapas, outputs y rutas alternativas de Bloomberg. Recolecte primero los datos y construya después el modelo y el football field.</p></div><section class="intro-card full-width-objective"><div><p class="eyebrow">Objetivo</p><h2>De la terminal al rango de valor</h2><p>Que el alumno sea capaz de valuar una empresa pública (o de referencia) por tres métodos: flujos de efectivo descontados (DCF), múltiplos de comparables y transacciones precedentes, obteniendo todos los insumos (WACC, proyecciones, inflación, costo de deuda, beta, prima de riesgo) desde Bloomberg Terminal, y que sepa integrar todo en un rango de valor tipo “football field” para una decisión de M&amp;A.</p><div class="didactic-note"><strong>Nota didáctica.</strong> Esta guía es la versión para Bloomberg de las guías de LSEG Workspace y Capital IQ Pro del mismo curso: el método de valuación es idéntico; lo que cambia es dónde vive cada dato. La característica de Bloomberg es que hay varias rutas (funciones) para llegar al mismo dato: en cada paso se presentan alternativas. La regla de la plataforma es escribir el ticker + la tecla amarilla del mercado (por ejemplo, &lt;EQUITY&gt;) + la función + &lt;GO&gt;; cuando estén perdidos, presionen la tecla verde &lt;HELP&gt; sobre cualquier pantalla para ver su manual, o escriban HELP HELP para chatear con un analista de Bloomberg 24/7.</div></div></section><article class="content-card guide-content"><h2 class="text-29" id="mapa-general-del-proceso"><strong>0. Mapa general del proceso</strong></h2><table>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Guía de Valuación con Bloomberg</title><style>:root{--navy:#10265e;--blue:#315ed3;--cyan:#58a6e7;--line:#dce3f0;--muted:#68758f;--bg:#f4f6fb;--ink:#18233d}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);line-height:1.62}header{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:25px 32px;color:#fff;background:linear-gradient(100deg,#0b1d4d,#224397 55%,#416be0)}header h1{margin:3px 0;font-size:clamp(1.65rem,3vw,2.45rem)}header p{margin:2px 0}.eyebrow{text-transform:uppercase;letter-spacing:.11em;font-size:.68rem;font-weight:900;color:#6175a5}.light{color:#c8d4ff}.header-note{display:grid;gap:2px;text-align:right}.header-note strong{font-size:1.05rem}.header-note span{font-size:.72rem;color:#d7e0ff}.guide-nav{position:sticky;top:0;z-index:40;display:flex;gap:4px;padding:8px 18px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 5px 18px #1b326511;overflow-x:auto}.guide-nav button{border:0;border-radius:8px;padding:9px 12px;background:#edf2ff;color:#40527c;font-weight:850;white-space:nowrap;cursor:pointer}.guide-nav button.active{background:var(--blue);color:#fff}main{max-width:1320px;margin:auto;padding:18px}.intro-card{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr);gap:18px;align-items:start;margin-bottom:15px;padding:22px;border:1px solid var(--line);border-radius:14px;background:#fff}.intro-card h2{margin:3px 0;color:var(--navy)}.didactic-note{margin-top:14px;padding:12px 14px;border-left:4px solid var(--blue);border-radius:8px;background:#eef3ff;color:#40527c;font-size:.78rem}.syntax-card{padding:17px;border-radius:11px;background:#101d41;color:#fff}.syntax-card span,.syntax-card strong,.syntax-card small{display:block}.syntax-card span{font-size:.62rem;text-transform:uppercase;color:#a9bdf7;letter-spacing:.1em}.syntax-card strong{margin:7px 0;font:700 .9rem ui-monospace,SFMono-Regular,Consolas,monospace}.syntax-card small{color:#cfd8f3}.guide-page[hidden]{display:none}.page-hero{padding:18px 20px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(135deg,#edf3ff,#fff)}.page-hero h2{margin:3px 0;color:var(--navy);font-size:1.55rem}.page-hero p:last-child{margin:0;max-width:950px;color:var(--muted)}.content-card{margin-top:14px;padding:22px 25px;border:1px solid var(--line);border-radius:13px;background:#fff;box-shadow:0 8px 25px #152c5e0c}.guide-content>h2{margin:1.8rem 0 .9rem;padding:10px 13px;border-left:5px solid var(--blue);border-radius:8px;background:#eef3ff;color:var(--navy);font-size:1.34rem}.guide-content>h2:first-child{margin-top:0}.topic-card{margin:15px 0;padding:16px 18px;border:1px solid var(--line);border-radius:11px;background:linear-gradient(145deg,#fff,#fbfcff);box-shadow:0 5px 18px #142c5e0a}.topic-card h3{margin:0 0 9px;color:#244da6;font-size:1.08rem}.topic-card h4{color:#385994}.guide-content p{margin:.65rem 0}.guide-content ul,.guide-content ol{padding-left:1.4rem}.guide-content li{margin:.38rem 0}.guide-content strong{color:#172c61}.guide-content em{color:#465570}.terminal-command{display:inline-block;padding:1px 5px;margin:1px;border:1px solid #c7d5f5;border-radius:5px;background:#edf3ff;color:#244da6;font:700 .78em ui-monospace,SFMono-Regular,Consolas,monospace}.guide-content table{width:100%;border-collapse:separate;border-spacing:0;margin:1rem 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.82rem}.guide-content th{padding:10px;background:var(--navy);color:#fff;text-align:left}.guide-content td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}.guide-content tr:nth-child(even) td{background:#f8faff}.equation{margin:16px auto;padding:15px 18px;max-width:900px;border-left:5px solid #2f62df;border-radius:9px;background:#eaf0ff;color:#001f63;text-align:center;font:700 1.08rem Cambria,'Times New Roman',serif;letter-spacing:.01em;overflow-x:auto}.terminal-shot{display:block;width:min(720px,100%);height:auto;margin:13px auto;padding:5px;border:1px solid #cbd5e6;border-radius:9px;background:#0b0d12;box-shadow:0 8px 26px #0b1d4d20;cursor:zoom-in;transition:transform .15s,box-shadow .15s}.terminal-shot:hover,.terminal-shot:focus{transform:translateY(-2px);box-shadow:0 12px 32px #0b1d4d35;outline:3px solid #99b5ff}.terminal-shot+br{display:none}.lightbox[hidden]{display:none}.lightbox{position:fixed;inset:0;z-index:1000;display:grid;grid-template-rows:1fr auto;place-items:center;padding:30px;background:#071126eb}.lightbox img{max-width:min(94vw,1500px);max-height:82vh;border-radius:8px;box-shadow:0 25px 80px #000}.lightbox p{max-width:900px;margin:12px 0 0;color:#fff;text-align:center}.lightbox button{position:absolute;right:20px;top:14px;width:44px;height:44px;border:0;border-radius:50%;background:#ffffff22;color:#fff;font-size:2rem;cursor:pointer}footer{display:grid;grid-template-columns:minmax(240px,.55fr) minmax(0,1.45fr);gap:24px;padding:22px 30px;background:#0d1f4f;color:#fff;font-size:.69rem;line-height:1.5}footer strong,footer span{display:block}footer span{color:#c7d2ef;margin-top:3px}footer p{margin:0;color:#d4dcf1}@media(max-width:900px){.intro-card{grid-template-columns:1fr}.header-note{display:none}.content-card{padding:18px}.guide-content table{display:block;overflow-x:auto}.terminal-shot{width:100%}footer{grid-template-columns:1fr}}@media(max-width:520px){header{padding:20px}.guide-nav{padding:7px 9px}main{padding:11px}.content-card{padding:14px}.topic-card{padding:13px}.equation{font-size:.92rem}footer{padding:20px}}
+
+/* Version 4 layout refinements */
+.full-width-objective{display:block;width:100%;}
+.full-width-objective>div{width:100%;}
+.full-width-objective .didactic-note{width:100%;}
+.guide-page:not([hidden]){display:grid;grid-template-columns:minmax(210px,250px) minmax(0,1fr);gap:18px;align-items:start;}
+.guide-page>.page-hero{grid-column:1;position:sticky;top:68px;margin:0;padding:20px 18px;border-left:5px solid var(--blue);background:linear-gradient(180deg,#edf3ff,#fff);}
+.guide-page>.page-hero h2{font-size:1.34rem;line-height:1.25;}
+.guide-page>.page-hero p:last-child{font-size:.82rem;line-height:1.5;}
+.guide-page>.content-card{grid-column:2;margin-top:0;}
+.guide-page>.intro-card,.guide-page>.syntax-card{grid-column:1/-1;}
+.terminal-figure{margin:2rem 0 2.15rem;text-align:center;}
+.terminal-figure figcaption{display:flex;flex-direction:column;align-items:center;gap:3px;margin:0 auto 14px;max-width:850px;color:var(--muted);line-height:1.4;}
+.terminal-figure figcaption strong{color:var(--navy);font-size:.95rem;}
+.terminal-figure figcaption span{font-size:.78rem;}
+.terminal-figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:8px;box-shadow:0 8px 24px #10265e18;}
+@media(max-width:850px){.guide-page:not([hidden]){display:block}.guide-page>.page-hero{position:static;margin-bottom:14px}.guide-page>.content-card{margin-top:0}.terminal-figure{margin:1.5rem 0}}
+
+/* Version 5: integrated full-height left rail and single figure titles */
+.guide-page:not([hidden]){
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr);
+  column-gap:0;
+  row-gap:18px;
+  align-items:start;
+  border-left:5px solid var(--blue);
+  background:linear-gradient(to right,#edf3ff 0,#edf3ff 250px,transparent 250px,transparent 100%);
+}
+.guide-page>.page-hero{
+  grid-column:1;
+  grid-row:1 / span 50;
+  align-self:stretch;
+  position:sticky;
+  top:64px;
+  margin:0;
+  padding:24px 20px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.guide-page>.intro-card,
+.guide-page>.syntax-card,
+.guide-page>.content-card{
+  grid-column:2;
+  width:auto;
+  margin:0 0 0 18px;
+}
+.guide-page>.content-card:last-child{margin-bottom:0;}
+.terminal-figure{margin:2rem 0 2.15rem;text-align:center;}
+.terminal-figure figcaption{display:block;margin:0 auto 14px;max-width:850px;text-align:center;}
+.terminal-figure figcaption strong{display:block;color:var(--navy);font-size:.95rem;}
+.terminal-figure figcaption span{display:none;}
+@media(max-width:850px){
+  .guide-page:not([hidden]){display:block;border-left:0;background:transparent;}
+  .guide-page>.page-hero{position:static;margin:0 0 14px;padding:18px 20px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;background:linear-gradient(135deg,#edf3ff,#fff);}
+  .guide-page>.intro-card,.guide-page>.syntax-card,.guide-page>.content-card{width:auto;margin:0 0 14px;}
+}
+
+/* Version 6: captions restored, exact tab title, content-height rail */
+.guide-page:not([hidden]){
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr);
+  column-gap:18px;
+  row-gap:18px;
+  align-items:stretch;
+  border-left:0;
+  background:none;
+}
+.guide-page>.page-hero{
+  grid-column:1;
+  grid-row:1 / span 50;
+  align-self:stretch;
+  position:relative;
+  top:auto;
+  margin:0;
+  padding:24px 20px;
+  border:0;
+  border-left:5px solid var(--blue);
+  border-radius:0;
+  background:#edf3ff;
+  box-shadow:none;
+}
+.guide-page>.intro-card,
+.guide-page>.syntax-card,
+.guide-page>.content-card{
+  grid-column:2;
+  width:auto;
+  margin:0;
+}
+.terminal-figure figcaption{display:flex;flex-direction:column;align-items:center;gap:3px;margin:0 auto 14px;max-width:850px;text-align:center;}
+.terminal-figure figcaption span{display:block;color:var(--muted);font-size:.78rem;line-height:1.4;}
+@media(max-width:850px){
+ .guide-page:not([hidden]){display:block;}
+ .guide-page>.page-hero{margin:0 0 14px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;background:linear-gradient(135deg,#edf3ff,#fff);}
+ .guide-page>.intro-card,.guide-page>.syntax-card,.guide-page>.content-card{margin:0 0 14px;}
+}
+
+/* Version 7: feedback contact */
+.footer-contact{margin-top:10px;}
+.footer-contact a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px;}
+
+/* Version 8: compact content-sized page rail */
+.guide-page:not([hidden]){
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr);
+  column-gap:18px;
+  row-gap:18px;
+  align-items:start;
+  background:none;
+}
+.guide-page>.page-hero{
+  grid-column:1;
+  grid-row:1;
+  align-self:start;
+  position:static;
+  margin:0;
+  padding:22px 20px;
+  border:0;
+  border-left:5px solid var(--blue);
+  border-radius:0;
+  background:#edf3ff;
+  box-shadow:none;
+}
+.guide-page>.intro-card,
+.guide-page>.syntax-card,
+.guide-page>.content-card{
+  grid-column:2;
+  width:auto;
+  margin:0;
+}
+.guide-page>.intro-card:first-of-type,
+.guide-page>.syntax-card:first-of-type,
+.guide-page>.content-card:first-of-type{grid-row:1;}
+@media(max-width:850px){
+ .guide-page:not([hidden]){display:block;}
+ .guide-page>.page-hero{margin:0 0 14px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;background:linear-gradient(135deg,#edf3ff,#fff);}
+ .guide-page>.intro-card,.guide-page>.syntax-card,.guide-page>.content-card{margin:0 0 14px;}
+}
+
+/* Version 9: deduplicated figure headings, aligned feedback, taller rail */
+.guide-page>.page-hero{
+  min-height:576px;
+  box-sizing:border-box;
+}
+footer{align-items:start;}
+.footer-disclaimer-block{display:flex;flex-direction:column;gap:10px;min-width:0;}
+.footer-disclaimer-block p{margin:0;}
+.footer-disclaimer-block .footer-contact{margin:0;text-align:left;}
+@media(max-width:850px){
+  .guide-page>.page-hero{min-height:0;}
+}
+
+
+/* Sidebar-only fork: contextual section index added to the stable v12. */
+@media (min-width: 901px){
+  main > .guide-page{display:grid;grid-template-columns:270px minmax(0,1fr);column-gap:24px;align-items:start}
+  main > .guide-page > .page-hero{grid-column:1;grid-row:1 / span 200;align-self:start;position:sticky;top:64px;margin:0;padding:24px 20px;border:0;border-left:5px solid var(--blue);border-radius:0;background:#edf3ff;box-shadow:none;min-height:0}
+  main > .guide-page > :not(.page-hero){grid-column:2}
+}
+.context-toc{margin-top:24px;border-top:1px solid rgba(18,57,112,.18);padding-top:15px}
+.context-toc-label{font-size:.68rem;letter-spacing:.13em;font-weight:900;color:#5470a0;margin:0 0 9px;text-transform:uppercase}
+.context-toc ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.context-toc li{margin:0}
+.context-toc a{display:block;padding:7px 8px;border-radius:7px;color:#173462;text-decoration:none;font-size:.8rem;line-height:1.28}
+.context-toc a:hover,.context-toc a:focus-visible{background:#dce7ff;color:#173f92;outline:none}
+.context-toc .toc-sub a{padding-left:18px;font-size:.75rem;color:#536585}
+@media (max-width:900px){
+  main > .guide-page{display:block}
+  main > .guide-page > .page-hero{position:static;margin:0 0 14px;padding:18px 20px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;background:linear-gradient(135deg,#edf3ff,#fff)}
+  .context-toc{display:none}
+}
+
+
+/* v2 layout fix: use an explicit content wrapper so the sidebar cannot create empty grid rows. */
+@media (min-width:901px){
+  main > .guide-page{display:grid;grid-template-columns:270px minmax(0,1fr);gap:24px;align-items:start}
+  main > .guide-page > .page-hero{grid-column:1;grid-row:1;align-self:start;position:sticky;top:64px;margin:0;padding:24px 20px;border:0;border-left:5px solid var(--blue);border-radius:0;background:#edf3ff;box-shadow:none;min-height:0}
+  main > .guide-page > .page-main-content{grid-column:2;grid-row:1;min-width:0}
+}
+@media (max-width:900px){
+  main > .guide-page{display:block}
+  main > .guide-page > .page-main-content{display:block}
+}
+</style><meta content="1" name="sidebar-fork-version"/></head><body>
+<header><div><p class="eyebrow light">MAF - Fusiones y Adquisiciones</p><h1>Guía de valuación utilizando Bloomberg</h1><p>Curso: Fusiones y Adquisiciones · Prof. Dr. Jonas Lucio Maia</p></div><div class="header-note"><strong>Bloomberg Terminal</strong><span>DCF · Comparables · Precedentes</span></div></header>
+<nav aria-label="Secciones de la guía" class="guide-nav"><button data-page="overview" type="button">Mapa y ruta de trabajo</button><button data-page="terminal" type="button">Primeros pasos en Bloomberg</button><button data-page="company" type="button">Empresa, históricos y FCFF</button><button data-page="macro" type="button">Supuestos macro</button><button data-page="wacc" type="button">WACC</button><button data-page="forecast" type="button">Proyecciones, DCF y sensibilidad</button><button data-page="comps" type="button">Comparables</button><button data-page="precedents" type="button">Transacciones precedentes</button><button data-page="appendix" type="button">Cheat sheet y fuentes</button></nav><main><section class="guide-page" data-guide-page="overview"><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Mapa y ruta de trabajo</h2><p>Panorama de las etapas, outputs y rutas alternativas de Bloomberg. Recolecte primero los datos y construya después el modelo y el football field.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#overview/overview-de-la-terminal-al-rango-de-valor">De la terminal al rango de valor</a></li><li class="toc-main"><a href="#overview/overview-0-mapa-general-del-proceso">0. Mapa general del proceso</a></li></ul></nav></div><div class="page-main-content"><section class="intro-card full-width-objective"><div><p class="eyebrow">Objetivo</p><h2 id="overview-de-la-terminal-al-rango-de-valor">De la terminal al rango de valor</h2><p>Que el alumno sea capaz de valuar una empresa pública (o de referencia) por tres métodos: flujos de efectivo descontados (DCF), múltiplos de comparables y transacciones precedentes, obteniendo todos los insumos (WACC, proyecciones, inflación, costo de deuda, beta, prima de riesgo) desde Bloomberg Terminal, y que sepa integrar todo en un rango de valor tipo “football field” para una decisión de M&amp;A.</p><div class="didactic-note"><strong>Nota didáctica.</strong> Esta guía es la versión para Bloomberg de las guías de LSEG Workspace y Capital IQ Pro del mismo curso: el método de valuación es idéntico; lo que cambia es dónde vive cada dato. La característica de Bloomberg es que hay varias rutas (funciones) para llegar al mismo dato: en cada paso se presentan alternativas. La regla de la plataforma es escribir el ticker + la tecla amarilla del mercado (por ejemplo, &lt;EQUITY&gt;) + la función + &lt;GO&gt;; cuando estén perdidos, presionen la tecla verde &lt;HELP&gt; sobre cualquier pantalla para ver su manual, o escriban HELP HELP para chatear con un analista de Bloomberg 24/7.</div></div></section><article class="content-card guide-content"><h2 class="text-29" id="process-map-title"><strong>0. Mapa general del proceso</strong></h2><table>
 <colgroup>
 <col style="width: 19%"/>
 <col style="width: 29%"/>
@@ -63,13 +248,13 @@
 </tr>
 </tbody>
 </table><p><strong>Flujo de trabajo sugerido para el alumno:</strong> primero recolectar datos (etapas 1-5 y 7-8), después construir el modelo en Excel (etapas 6 y 9).</p><p><strong><br/>
-</strong></p></article></section><section class="guide-page" data-guide-page="terminal" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Primeros pasos en Bloomberg</h2><p>Sintaxis universal, búsqueda de tickers, funciones esenciales, Excel add-in, exportación y disciplina de documentación.</p></div><div class="syntax-card"><span>Sintaxis universal</span><strong>TICKER + &lt;EQUITY&gt; + FUNCIÓN + &lt;GO&gt;</strong><small>Use &lt;HELP&gt; sobre cualquier pantalla o HELP HELP para asistencia.</small></div><article class="content-card guide-content"><h2 class="text-29" id="primeros-pasos-en-la-terminal"><strong>1. Primeros pasos en la terminal</strong></h2><section class="topic-card"><h3 class="text-71" id="acceder-y-entender-el-teclado"><strong>1.1 Acceder y entender el teclado</strong></h3>
+</strong></p></article></div></section><section class="guide-page" data-guide-page="terminal" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Primeros pasos en Bloomberg</h2><p>Sintaxis universal, búsqueda de tickers, funciones esenciales, Excel add-in, exportación y disciplina de documentación.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#terminal/terminal-1-primeros-pasos-en-la-terminal">1. Primeros pasos en la terminal</a></li><li class="toc-sub"><a href="#terminal/terminal-1-1-acceder-y-entender-el-teclado">1.1 Acceder y entender el teclado</a></li><li class="toc-sub"><a href="#terminal/terminal-1-2-buscar-una-empresa-varias-rutas">1.2 Buscar una empresa (varias rutas)</a></li><li class="toc-sub"><a href="#terminal/terminal-1-3-funciones-importantes">1.3 Funciones importantes</a></li><li class="toc-sub"><a href="#terminal/terminal-1-4-buenas-pr-cticas-desde-el-inicio">1.4 Buenas prácticas desde el inicio</a></li></ul></nav></div><div class="page-main-content"><div class="syntax-card"><span>Sintaxis universal</span><strong>TICKER + &lt;EQUITY&gt; + FUNCIÓN + &lt;GO&gt;</strong><small>Use &lt;HELP&gt; sobre cualquier pantalla o HELP HELP para asistencia.</small></div><article class="content-card guide-content"><h2 class="text-29" id="terminal-1-primeros-pasos-en-la-terminal"><strong>1. Primeros pasos en la terminal</strong></h2><section class="topic-card"><h3 class="text-71" id="terminal-1-1-acceder-y-entender-el-teclado"><strong>1.1 Acceder y entender el teclado</strong></h3>
 <ol type="1">
 <li><p>Bloomberg es una aplicación de escritorio (Windows) o de web (Bloomberg Anywhere); en la universidad se usa en los equipos con terminal asignado. Inicien sesión con su cuenta.</p></li>
 <li><p>Teclas amarillas = mercados: la más usada en este curso es <strong>&lt;EQUITY&gt;</strong> (acciones) y <strong>&lt;CORP&gt;</strong> (bonos corporativos); la tecla verde <strong>&lt;<code class="terminal-command">HELP</code>&gt;</strong> abre el manual de la pantalla activa.</p></li>
 <li><p>Sintaxis universal: <strong>ticker, tecla de mercado, función, &lt;GO&gt;</strong>. Ejemplo para toda la guía: <strong>WALMEX MX &lt;Equity&gt; <code class="terminal-command">DES</code> &lt;GO&gt;</strong> abre la descripción de Walmart de México y Centroamérica, la empresa caso del curso.</p></li>
 </ol>
-</section><section class="topic-card"><h3 class="text-71" id="buscar-una-empresa-varias-rutas"><strong>1.2 Buscar una empresa (varias rutas)</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="terminal-1-2-buscar-una-empresa-varias-rutas"><strong>1.2 Buscar una empresa (varias rutas)</strong></h3>
 <ul>
 <li><p><strong>Ruta 1:</strong> escriban "WALMEX" y el sistema sugiere; seleccionen <strong>WALMEX MX Equity</strong>.</p></li>
 <li><p><strong>Ruta 2:</strong> &lt;EQUITY&gt; TK {nombre} &lt;GO&gt; (búsqueda de ticker).</p></li>
@@ -78,7 +263,7 @@
 <ol start="4" type="1">
 <li><p>Apunten el ticker completo (<strong>WALMEX MX</strong>) y el número de acciones en circulación (aparece en <code class="terminal-command">DES</code>; también vía Excel con el campo de shares outstanding, búsquenlo en <code class="terminal-command">FLDS</code>).</p></li>
 </ol>
-</section><section class="topic-card"><h3 class="text-71" id="funciones-importantes"><strong>1.3 Funciones importantes</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="terminal-1-3-funciones-importantes"><strong>1.3 Funciones importantes</strong></h3>
 <ul>
 <li><p><strong><code class="terminal-command">DES</code>:</strong> description, la ficha de la empresa (beta, market cap, acciones, índices, noticias clave).</p></li>
 <li><p><strong><code class="terminal-command">FA</code>:</strong> Financial Analysis, el corazón de los históricos.</p></li>
@@ -93,14 +278,14 @@
 <li><p><strong>Exportar:</strong> casi toda pantalla se manda a Excel con clic derecho, copiar, o el menú Output/Export de cada función.</p></li>
 </ul>
 <figure class="terminal-figure"><figcaption><strong>DES – Incluyendo acciones</strong><span>Ficha descriptiva del emisor y datos básicos de la acción.</span></figcaption><img alt="DES – Incluyendo acciones" class="terminal-shot" data-caption="DES – Incluyendo acciones" data-shot="1" loading="lazy" role="button" src="assets/media/image1.png" style="width:6.5in;height:3.52569in" tabindex="0"/></figure>
-</section><section class="topic-card"><h3 class="text-71" id="buenas-prácticas-desde-el-inicio"><strong>1.4 Buenas prácticas desde el inicio</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="terminal-1-4-buenas-pr-cticas-desde-el-inicio"><strong>1.4 Buenas prácticas desde el inicio</strong></h3>
 <ul>
 <li><p>Documenten siempre: fecha de consulta, ticker, función usada y parámetros (¡la ventana de la beta y el índice elegido cambian el resultado!). En la memoria de valuación, citar "<code class="terminal-command">BETA</code> &lt;GO&gt;, 5Y mensual vs. IPC Mexicano" es una fuente; "Bloomberg" solo, no.</p></li>
 <li><p>Exporten a Excel en cuanto tengan una tabla.</p></li>
 </ul>
 <p><strong><br/>
 </strong></p>
-</section></article></section><section class="guide-page" data-guide-page="company" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Empresa, históricos y FCFF</h2><p>Comprenda el negocio y el control; después recupere, normalice y verifique los estados financieros que alimentan el modelo.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-1-perfil-de-la-empresa-objetivo"><strong>2. Paso 1: Perfil de la empresa objetivo</strong></h2><p>Antes de cualquier número, entiendan el negocio. <strong>Rutas para el caso WALMEX MX:</strong></p><ol type="1">
+</section></article></div></section><section class="guide-page" data-guide-page="company" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Empresa, históricos y FCFF</h2><p>Comprenda el negocio y el control; después recupere, normalice y verifique los estados financieros que alimentan el modelo.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#company/company-2-paso-1-perfil-de-la-empresa-objetivo">2. Paso 1: Perfil de la empresa objetivo</a></li><li class="toc-main"><a href="#company/company-3-paso-2-estados-financieros-hist-ricos">3. Paso 2: Estados financieros históricos</a></li><li class="toc-sub"><a href="#company/company-3-1-qu-es-importante-de-los-hist-ricos-para-el-modelo">3.1 Qué es importante de los históricos (para el modelo)</a></li><li class="toc-sub"><a href="#company/company-3-2-c-lculo-hist-rico-del-free-cash-flow-to-the-firm">3.2 Cálculo histórico del Free Cash Flow to the Firm</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="company-2-paso-1-perfil-de-la-empresa-objetivo"><strong>2. Paso 1: Perfil de la empresa objetivo</strong></h2><p>Antes de cualquier número, entiendan el negocio. <strong>Rutas para el caso WALMEX MX:</strong></p><ol type="1">
 <li><p><strong><code class="terminal-command">DES</code> &lt;GO&gt;:</strong> descripción, segmentos de negocio, sede, acciones, market cap, beta, miembros del índice.</p></li>
 <li><p><strong><code class="terminal-command">HH</code> &lt;GO&gt; (Hoover's):</strong> historia y descripción más narrativa del negocio.</p></li>
 <li><p><strong><code class="terminal-command">OWN</code> &lt;GO&gt;:</strong> estructura accionaria: quién controla (la participación de Walmart Inc. como controlador es clave para la discusión de M&amp;A), free float, instituciones.</p></li>
@@ -109,12 +294,12 @@
 <li><p><strong><code class="terminal-command">CF</code> &lt;GO&gt;:</strong> filings, reportes trimestrales y anuales.</p></li>
 <li><p><strong><code class="terminal-command">CN</code> &lt;GO&gt;:</strong> news y research de la empresa; <strong>NSE <code class="terminal-command">MNA</code> &lt;GO&gt;</strong> filtra noticias de M&amp;A.</p></li>
 <li><p><strong><code class="terminal-command">RSKC</code> &lt;GO&gt;:</strong> riesgos de la empresa (buena fuente para la sección de riesgos de su memoria).</p></li>
-</ol><h2 class="text-29" id="paso-2-estados-financieros-históricos"><strong>3. Paso 2: Estados financieros históricos</strong></h2><p><strong>Rutas:</strong></p><ol type="1">
+</ol><h2 class="text-29" id="company-3-paso-2-estados-financieros-hist-ricos"><strong>3. Paso 2: Estados financieros históricos</strong></h2><p><strong>Rutas:</strong></p><ol type="1">
 <li><p><strong><code class="terminal-command">FA</code> &lt;GO&gt;</strong> (con el ticker cargado): la función central. Tiene pestañas y atajos: <strong><code class="terminal-command">FA</code> IS</strong> (estado de resultados), <strong><code class="terminal-command">FA</code> BS</strong> (balance), <strong><code class="terminal-command">FA</code> <code class="terminal-command">CF</code></strong> (flujos, con métricas de free cash flow), <strong><code class="terminal-command">FA</code> PROF</strong> (rentabilidad), y ratios por categoría (márgenes, apalancamiento, NOWC). Con el selector pidan <strong>anual, 5-10 años</strong>.</p></li>
 <li><p><strong><code class="terminal-command">FG</code> &lt;GO&gt;:</strong> fundamentals graph, series históricas de renglones financieros graficadas.</p></li>
 <li><p><strong><code class="terminal-command">CF</code> &lt;GO&gt;:</strong> reportes originales de la empresa (as reported): úsenlos para cruzar partidas específicas y partidas no recurrentes.</p></li>
 <li><p><strong><code class="terminal-command">BIO</code> / <code class="terminal-command">BI</code> &lt;GO&gt;:</strong> Bloomberg Intelligence: estudios de sector con drivers (márgenes, crecimiento de la industria).</p></li>
-</ol><p><strong>Exportación:</strong> desde <code class="terminal-command">FA</code>, menú de salida a Excel (Output).</p><figure class="terminal-figure"><figcaption><strong>FA - Activo</strong><span>Consulta de estados financieros y series históricas del activo.</span></figcaption><img alt="FA - Activo" class="terminal-shot" data-caption="FA - Activo" data-shot="2" loading="lazy" role="button" src="assets/media/image2.png" style="width:6.5in;height:3.55972in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="3" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="4" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><section class="topic-card"><h3 class="text-71" id="qué-es-importante-de-los-históricos-para-el-modelo"><strong>3.1 Qué es importante de los históricos (para el modelo)</strong></h3>
+</ol><p><strong>Exportación:</strong> desde <code class="terminal-command">FA</code>, menú de salida a Excel (Output).</p><figure class="terminal-figure"><figcaption><strong>FA - Activo</strong><span>Consulta de estados financieros y series históricas del activo.</span></figcaption><img alt="FA - Activo" class="terminal-shot" data-caption="FA - Activo" data-shot="2" loading="lazy" role="button" src="assets/media/image2.png" style="width:6.5in;height:3.55972in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="3" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><figure class="terminal-figure"><figcaption><strong>Captura de Bloomberg Terminal</strong><span>Pantalla de Bloomberg correspondiente al procedimiento descrito en esta sección.</span></figcaption><img alt="Captura de Bloomberg Terminal" class="terminal-shot" data-caption="Captura de Bloomberg Terminal" data-shot="4" loading="lazy" role="button" src="assets/media/image3.png" style="width:6.5in;height:3.59444in" tabindex="0"/></figure><section class="topic-card"><h3 class="text-71" id="company-3-1-qu-es-importante-de-los-hist-ricos-para-el-modelo"><strong>3.1 Qué es importante de los históricos (para el modelo)</strong></h3>
 <ul>
 <li><p>Ventas (ingreso neto) y su crecimiento año a año.</p></li>
 <li><p><strong>Margen bruto, EBITDA y EBIT</strong> (<code class="terminal-command">FA</code> reporta márgenes y EBITDA directo).</p></li>
@@ -125,11 +310,11 @@
 <li><p>Participaciones minoritarias, inversiones en asociadas, activos no operativos.</p></li>
 <li><p><strong>Tasa efectiva de impuestos</strong> de los últimos 3 años.</p></li>
 </ul>
-</section><section class="topic-card"><h3 class="text-71" id="cálculo-histórico-del-free-cash-flow-to-the-firm"><strong>3.2 Cálculo histórico del Free Cash Flow to the Firm</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="company-3-2-c-lculo-hist-rico-del-free-cash-flow-to-the-firm"><strong>3.2 Cálculo histórico del Free Cash Flow to the Firm</strong></h3>
 <p>FCFF = EBIT * (1-t) + D&amp;A - CAPEX - DeltaNOWC</p><div aria-label="FCFF = EBIT × (1 − T) + D&amp;A − CAPEX − ΔNOWC" class="equation" role="math">FCFF = EBIT × (1 − T) + D&amp;A − CAPEX − ΔNOWC</div>
 <p>Calcúlenlo para los últimos 3-5 años: les dará el punto de partida de las proyecciones y márgenes históricos de FCF (sanity check del modelo).</p>
 <p><strong>Ojo con:</strong> partidas no recurrentes (venta de activos, provisiones únicas, efectos contables de hiperinflación en algunas filiales). Ajusten y documenten cada ajuste. Bonus: <strong><code class="terminal-command">DDM</code> &lt;GO&gt;</strong> les muestra el valor por descuento de dividendos de Bloomberg, buen contraste conceptual para discutir métodos de equity.</p>
-</section></article></section><section class="guide-page" data-guide-page="macro" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Supuestos macro</h2><p>Inflación, crecimiento real, tasas de política, breakevens, forwards y consistencia entre moneda, flujos y tasa de descuento.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-3-supuestos-macro-inflación-y-crecimiento"><strong>4. Paso 3: Supuestos macro (inflación y crecimiento)</strong></h2><p><strong>Rutas:</strong></p><section class="topic-card"><h3 class="text-71" id="proyección-de-inflación"><strong>4.1 Proyección de inflación</strong></h3>
+</section></article></div></section><section class="guide-page" data-guide-page="macro" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Supuestos macro</h2><p>Inflación, crecimiento real, tasas de política, breakevens, forwards y consistencia entre moneda, flujos y tasa de descuento.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#macro/macro-4-paso-3-supuestos-macro-inflaci-n-y-crecimiento">4. Paso 3: Supuestos macro (inflación y crecimiento)</a></li><li class="toc-sub"><a href="#macro/macro-4-1-proyecci-n-de-inflaci-n">4.1 Proyección de inflación</a></li><li class="toc-sub"><a href="#macro/macro-4-2-crecimiento-de-largo-plazo-para-el-valor-terminal">4.2 Crecimiento de largo plazo (para el <span class="glossary-term" data-definition="Valor atribuido a los flujos posteriores al periodo explícito." tabindex="0">valor terminal</span>)</a></li><li class="toc-sub"><a href="#macro/macro-4-3-moneda-y-tasas-de-pol-tica">4.3 Moneda y tasas de política</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="macro-4-paso-3-supuestos-macro-inflaci-n-y-crecimiento"><strong>4. Paso 3: Supuestos macro (inflación y crecimiento)</strong></h2><p><strong>Rutas:</strong></p><section class="topic-card"><h3 class="text-71" id="macro-4-1-proyecci-n-de-inflaci-n"><strong>4.1 Proyección de inflación</strong></h3>
 <ul>
 <li><p><strong>Ruta 1, pronósticos de economistas: <code class="terminal-command">ECFC</code> &lt;GO&gt;</strong> (Economic Forecasts): pronósticos por país e indicador, incluida <strong>inflación (CPI)</strong> de México para los próximos años. Es el equivalente al consenso de Reuters Polls de LSEG.</p></li>
 <li><p><strong>Ruta 2, calendario: <code class="terminal-command">ECO</code> &lt;GO&gt;:</strong> calendario económico con el <strong>consenso de expectativas</strong> para cada indicador que se va a publicar (filtro país: México); útil para el corto plazo.</p></li>
@@ -146,18 +331,18 @@
 <figure class="terminal-figure"><figcaption><strong>ILBE – US Breakevens a diferentes periodos</strong><span>Breakevens de inflación de Estados Unidos para distintos vencimientos.</span></figcaption><img alt="ILBE – US Breakevens a diferentes periodos" class="terminal-shot" data-caption="ILBE – US Breakevens a diferentes periodos" data-shot="10" loading="lazy" role="button" src="assets/media/image9.png" style="width:6.5in;height:3.53958in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>MEX – ECST - Banxico</strong><span>Estimaciones macroeconómicas de México y referencias de Banco de México.</span></figcaption><img alt="MEX – ECST - Banxico" class="terminal-shot" data-caption="MEX – ECST - Banxico" data-shot="11" loading="lazy" role="button" src="assets/media/image10.png" style="width:6.5in;height:3.63472in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>ILBE – MEX Breakevens a diferentes periodos</strong><span>Breakevens de inflación de México para distintos vencimientos.</span></figcaption><img alt="ILBE – MEX Breakevens a diferentes periodos" class="terminal-shot" data-caption="ILBE – MEX Breakevens a diferentes periodos" data-shot="12" loading="lazy" role="button" src="assets/media/image11.png" style="width:6.5in;height:3.55625in" tabindex="0"/></figure>
-</section><section class="topic-card"><h3 class="text-71" id="crecimiento-de-largo-plazo-para-el-valor-terminal"><strong>4.2 Crecimiento de largo plazo (para el valor terminal)</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="macro-4-2-crecimiento-de-largo-plazo-para-el-valor-terminal"><strong>4.2 Crecimiento de largo plazo (para el valor terminal)</strong></h3>
 <p>Mismo flujo: <strong><code class="terminal-command">ECFC</code></strong> trae pronósticos de <strong>PIB real</strong> de México. Como referencia razonable: <strong>g de largo plazo = inflación de largo plazo esperada + crecimiento real del PIB</strong>.</p><div aria-label="g nominal de largo plazo = Inflación esperada de largo plazo + Crecimiento real del PIB" class="equation" role="math">g nominal de largo plazo = Inflación esperada de largo plazo + Crecimiento real del PIB</div>
-</section><section class="topic-card"><h3 class="text-71" id="moneda-y-tasas-de-política"><strong>4.3 Moneda y tasas de política</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="macro-4-3-moneda-y-tasas-de-pol-tica"><strong>4.3 Moneda y tasas de política</strong></h3>
 <ul>
 <li><p><strong><code class="terminal-command">WIRP</code> &lt;GO&gt;</strong> (World Interest Rate Probabilities): la trayectoria esperada de la tasa de política (Banxico/Fed) implícita en instrumentos de mercado: contexto de oro para discutir el nivel de tasas y el valor terminal.</p></li>
 <li><p>Si van a valuar en USD, apliquen paridad: depreciación esperada ≈ diferencia de inflaciones; los forwards del peso salen con <strong><code class="terminal-command">FXC</code> &lt;GO&gt;</strong> (spot y forwards).</p><div aria-label="Depreciación esperada ≈ Inflación local − Inflación de la moneda base" class="equation" role="math">Depreciación esperada ≈ Inflación local − Inflación de la moneda base</div></li>
 </ul>
 <p><strong><br/>
 </strong></p>
-</section></article></section><section class="guide-page" data-guide-page="wacc" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>WACC</h2><p>Construcción componente por componente de Rf, ERP, beta, costo de equity, costo de deuda, impuestos y pesos de capital.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-4-el-wacc-ingrediente-por-ingrediente"><strong>5. Paso 4: El <code class="terminal-command">WACC</code>, ingrediente por ingrediente</strong></h2><p>Fórmula objetivo:<br/>
+</section></article></div></section><section class="guide-page" data-guide-page="wacc" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>WACC</h2><p>Construcción componente por componente de Rf, ERP, beta, costo de equity, costo de deuda, impuestos y pesos de capital.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#wacc/wacc-5-paso-4-el-wacc-ingrediente-por-ingrediente">5. Paso 4: El <span class="glossary-term" data-definition="Costo promedio ponderado de deuda y equity." tabindex="0">WACC</span> , ingrediente por ingrediente</a></li><li class="toc-sub"><a href="#wacc/wacc-5-1-tasa-libre-de-riesgo-rf-varias-rutas">5.1 Tasa libre de riesgo (Rf), varias rutas</a></li><li class="toc-sub"><a href="#wacc/wacc-5-2-prima-de-riesgo-de-mercado-de-pa-s-erp-varias-rutas">5.2 Prima de riesgo de mercado / de país (ERP), varias rutas</a></li><li class="toc-sub"><a href="#wacc/wacc-5-3-beta-apalancada-varias-rutas">5.3 Beta apalancada (β), varias rutas</a></li><li class="toc-sub"><a href="#wacc/wacc-5-4-costo-de-equity-ke-modelo-capm">5.4 Costo de equity (Ke), modelo CAPM</a></li><li class="toc-sub"><a href="#wacc/wacc-5-5-costo-de-deuda-kd-varias-rutas">5.5 Costo de deuda (Kd), varias rutas</a></li><li class="toc-sub"><a href="#wacc/wacc-5-6-pesos-de-capital-e-y-d">5.6 Pesos de capital (E y D)</a></li><li class="toc-sub"><a href="#wacc/wacc-5-7-verificaci-n-cruzada-la-funci-n-wacc">5.7 Verificación cruzada: la función WACC</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="wacc-5-paso-4-el-wacc-ingrediente-por-ingrediente"><strong>5. Paso 4: El <code class="terminal-command">WACC</code>, ingrediente por ingrediente</strong></h2><p>Fórmula objetivo:<br/>
 <br/>
-<div aria-label="WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)" class="equation" role="math">WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)</div></p><p><strong>Bloomberg:</strong> funciones dedicadas a cada pieza del costo de capital (<code class="terminal-command">CRP</code>, <code class="terminal-command">EQRP</code>, <code class="terminal-command">BETA</code>, <code class="terminal-command">WACC</code>). Úsenlas, pero <strong>construyan el suyo</strong> y usen las de la plataforma como verificación.</p><section class="topic-card"><h3 class="text-71" id="tasa-libre-de-riesgo-rf-varias-rutas"><strong>5.1 Tasa libre de riesgo (Rf), varias rutas</strong></h3>
+<div aria-label="WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)" class="equation" role="math">WACC = [E / (D + E)] × kₑ + [D / (D + E)] × k𝒹 × (1 − T)</div></p><p><strong>Bloomberg:</strong> funciones dedicadas a cada pieza del costo de capital (<code class="terminal-command">CRP</code>, <code class="terminal-command">EQRP</code>, <code class="terminal-command">BETA</code>, <code class="terminal-command">WACC</code>). Úsenlas, pero <strong>construyan el suyo</strong> y usen las de la plataforma como verificación.</p><section class="topic-card"><h3 class="text-71" id="wacc-5-1-tasa-libre-de-riesgo-rf-varias-rutas"><strong>5.1 Tasa libre de riesgo (Rf), varias rutas</strong></h3>
 <ul>
 <li><p><strong>Ruta 1: <code class="terminal-command">YCRV</code> &lt;GO&gt;</strong> (yield curve analysis): seleccionen la curva gubernamental del país (US/México) y vean el rendimiento a 10 años.</p></li>
 <li><p><strong>Ruta 2: <code class="terminal-command">WB</code> &lt;GO&gt;</strong> (World Bond Markets): rendimientos soberanos de todos los países en una pantalla, con spread y desviación vs. promedio.</p></li>
@@ -170,7 +355,7 @@
 <figure class="terminal-figure"><figcaption><strong>Click Ticker + GY – Gráfica de Yield</strong><span>Evolución histórica del rendimiento del instrumento seleccionado.</span></figcaption><img alt="Click Ticker + GY – Gráfica de Yield" class="terminal-shot" data-caption="Click Ticker + GY – Gráfica de Yield" data-shot="15" loading="lazy" role="button" src="assets/media/image15.png" style="width:6.5in;height:3.52917in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield</strong><span>Evolución histórica del rendimiento del Treasury de referencia.</span></figcaption><img alt="Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield" class="terminal-shot" data-caption="Insertar Ticker (ej USGG10YR) + GY – Gráfica de Yield" data-shot="16" loading="lazy" role="button" src="assets/media/image16.png" style="width:6.5in;height:3.49861in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield</strong><span>Descripción y rendimiento del bono gubernamental mexicano de referencia.</span></figcaption><img alt="Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield" class="terminal-shot" data-caption="Insertar Ticker (ej GMXN10Y) + DES – Gráfica de Yield" data-shot="17" loading="lazy" role="button" src="assets/media/image17.png" style="width:6.5in;height:3.51944in" tabindex="0"/></figure>
-</section><section class="topic-card"><h3 class="text-71" id="prima-de-riesgo-de-mercado-de-país-erp-varias-rutas"><strong>5.2 Prima de riesgo de mercado / de país (ERP), varias rutas</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-2-prima-de-riesgo-de-mercado-de-pa-s-erp-varias-rutas"><strong>5.2 Prima de riesgo de mercado / de país (ERP), varias rutas</strong></h3>
 <ul>
 <li><p><strong>Ruta 1, función de país: <code class="terminal-command">CRP</code> &lt;GO&gt;</strong> (Country Risk Premium): Bloomberg calcula la prima de riesgo por país como el retorno esperado del mercado accionario del país menos la tasa libre de riesgo local (retornos internos ponderados por capitalización del índice principal). Ahí está la prima de México y de decenas de países.</p></li>
 <li><p><strong>Ruta 2, función de empresa: &lt;EQUITY&gt; <code class="terminal-command">EQRP</code> &lt;GO&gt;:</strong> la prima de riesgo de una acción específica (equity risk premium) con supuestos mostrados.</p></li>
@@ -184,7 +369,7 @@
 <figure class="terminal-figure"><figcaption><strong>EQRP directamente del activo</strong><span>Prima de riesgo de equity consultada directamente desde la acción.</span></figcaption><img alt="EQRP directamente del activo" class="terminal-shot" data-caption="EQRP directamente del activo" data-shot="20" loading="lazy" role="button" src="assets/media/image20.png" style="width:6.28658in;height:3.42001in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>CDSW – Credit Default Swap del pais</strong><span>Spreads de CDS soberanos como referencia de riesgo crediticio del país.</span></figcaption><img alt="CDSW – Credit Default Swap del pais" class="terminal-shot" data-caption="CDSW – Credit Default Swap del pais" data-shot="21" loading="lazy" role="button" src="assets/media/image21.png" style="width:6.26939in;height:3.40597in" tabindex="0"/></figure>
 </blockquote>
-</section><section class="topic-card"><h3 class="text-71" id="beta-apalancada-β-varias-rutas"><strong>5.3 Beta apalancada (β), varias rutas</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-3-beta-apalancada-varias-rutas"><strong>5.3 Beta apalancada (β), varias rutas</strong></h3>
 <ul>
 <li><p><strong>Ruta 1, la beta reportada: <code class="terminal-command">DES</code> &lt;GO&gt;</strong> muestra la beta (por defecto a 2 años, semanal, contra el índice local).</p></li>
 <li><p><strong>Ruta 2, la beta personalizada: &lt;EQUITY&gt; <code class="terminal-command">BETA</code> &lt;GO&gt;:</strong> regresión interactiva; cambien <strong>ventana (5 años), frecuencia (mensual) e índice de referencia</strong> (la pantalla muestra la beta ajustada y el R²: reporten ambos (beta con R² de 0.05 es ruido).</p></li>
@@ -201,10 +386,10 @@ promedien los betas desapalancados y reapalanquen con la estructura <strong>obje
 </ul>
 <figure class="terminal-figure"><figcaption><strong>Ticker (WALMEX) + BETA</strong><span>Estimación de beta de WALMEX con parámetros configurables.</span></figcaption><img alt="Ticker (WALMEX) + BETA" class="terminal-shot" data-caption="Ticker (WALMEX) + BETA" data-shot="22" loading="lazy" role="button" src="assets/media/image24.png" style="width:6.5in;height:3.52292in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>RV – Mercados – Beta</strong><span>Beta y métricas de mercado de empresas comparables.</span></figcaption><img alt="RV – Mercados – Beta" class="terminal-shot" data-caption="RV – Mercados – Beta" data-shot="23" loading="lazy" role="button" src="assets/media/image25.png" style="width:6.5in;height:3.55in" tabindex="0"/></figure>
-</section><section class="topic-card"><h3 class="text-71" id="costo-de-equity-ke-modelo-capm"><strong>5.4 Costo de equity (Ke), modelo CAPM</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-4-costo-de-equity-ke-modelo-capm"><strong>5.4 Costo de equity (Ke), modelo CAPM</strong></h3>
 <p><div aria-label="kₑ = R𝒻 + βₗ × ERP" class="equation" role="math">kₑ = R𝒻 + βₗ × ERP</div><br/>
 Contraste: <code class="terminal-command">EQRP</code> da una estimación de Ke-ERP de Bloomberg para la acción; si su CAPM difiere mucho, revisen beta y prima.</p>
-</section><section class="topic-card"><h3 class="text-71" id="costo-de-deuda-kd-varias-rutas"><strong>5.5 Costo de deuda (Kd), varias rutas</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-5-costo-de-deuda-kd-varias-rutas"><strong>5.5 Costo de deuda (Kd), varias rutas</strong></h3>
 <ul>
 <li><p><strong>Ruta 1, bonos de la empresa (la mejor si existen): &lt;CORP&gt; sobre WALMEX MX</strong> abre la lista de bonos del emisor. Sobre el bono relevante: <strong><code class="terminal-command">DES</code></strong> (ficha), <strong><code class="terminal-command">YAS</code> &lt;GO&gt;</strong> (yield and spread: rendimiento al vencimiento, spread contra la curva, duration), <strong><code class="terminal-command">DDIS</code> &lt;GO&gt;</strong> (distribución de vencimientos de toda la deuda del emisor), <strong><code class="terminal-command">CAST</code> &lt;GO&gt;</strong> (estructura de capital por entidad). Tomen el YTM del bono de mayor plazo y liquidez en la moneda de sus flujos: ese es el Kd de mercado.</p></li>
 <li><p><strong>Ruta 2, rating + spread sintético: <code class="terminal-command">CRPR</code> &lt;GO&gt;</strong> (ratings del emisor, historia y escala de las tres agencias) y <strong><code class="terminal-command">WCRP</code> &lt;GO&gt;</strong> (World Credit Risk Premiums: spreads de crédito por rating, sector y región). Kd ≈ Rf + spread del rating de su empresa.</p><div aria-label="k𝒹 ≈ R𝒻 + Spread de crédito del rating" class="equation" role="math">k𝒹 ≈ R𝒻 + Spread de crédito del rating</div></li>
@@ -218,14 +403,14 @@ Kd después de impuestos = Kd × (1 − t), con t la tasa marginal de la empresa
 <figure class="terminal-figure"><figcaption><strong>DRSK – Default Risk</strong><span>Indicadores de riesgo de incumplimiento del emisor.</span></figcaption><img alt="DRSK – Default Risk" class="terminal-shot" data-caption="DRSK – Default Risk" data-shot="26" loading="lazy" role="button" src="assets/media/image28.png" style="width:6.5in;height:3.56042in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>MIPD – Modelo de probabilidad implícita de impago</strong><span>Probabilidad implícita de incumplimiento estimada por Bloomberg.</span></figcaption><img alt="MIDP – Modelo de probabilidad implícita de impago" class="terminal-shot" data-caption="MIDP – Modelo de probabilidad implícita de impago" data-shot="27" loading="lazy" role="button" src="assets/media/image29.png" style="width:6.5in;height:3.41458in" tabindex="0"/></figure>
 <figure class="terminal-figure"><figcaption><strong>KPMG Corporate Tax Survey</strong><span>Referencia externa para contrastar tasas corporativas por jurisdicción.</span></figcaption><img alt="KPMG Corporate Tax Survey" class="terminal-shot" data-caption="KPMG Corporate Tax Survey" data-shot="28" loading="lazy" role="button" src="assets/media/image30.png" style="width:6.5in;height:3.59375in" tabindex="0"/></figure>
-</section><section class="topic-card"><h3 class="text-71" id="pesos-de-capital-e-y-d"><strong>5.6 Pesos de capital (E y D)</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-6-pesos-de-capital-e-y-d"><strong>5.6 Pesos de capital (E y D)</strong></h3>
 <ul>
 <li><p><strong>E:</strong> capitalización de mercado del <code class="terminal-command">DES</code> (precio × acciones; también CUR_MKT_CAP en Excel).</p></li>
 <li><p><strong>D:</strong> deuda financiera total (<code class="terminal-command">FA</code> BS; y detalle en <code class="terminal-command">DDIS</code>/<code class="terminal-command">CAST</code>: bonos + créditos + arrendamientos si aplican).</p></li>
 <li><p>Pesos con la estructura <strong>objetivo</strong> si la empresa está migrando de apalancamiento; si no, la actual es razonable.</p></li>
 <li><p>Convención de clase: incluyan arrendamientos como deuda o ajusten los flujos, pero no ambas cosas a la vez.</p></li>
 </ul>
-</section><section class="topic-card"><h3 class="text-71" id="verificación-cruzada-la-función-wacc"><strong>5.7 Verificación cruzada: la función <code class="terminal-command">WACC</code></strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="wacc-5-7-verificaci-n-cruzada-la-funci-n-wacc"><strong>5.7 Verificación cruzada: la función <code class="terminal-command">WACC</code></strong></h3>
 <ul>
 <li><p><strong>&lt;EQUITY&gt; <code class="terminal-command">WACC</code> &lt;GO&gt;:</strong> Bloomberg calcula el costo de capital de la empresa con sus supuestos (estructura, costo de deuda, prima de riesgo, tasa marginal). Úsenla como <strong>referencia de sanidad</strong> y lean sus supuestos (cada componente es clicable).</p></li>
 </ul>
@@ -234,7 +419,7 @@ Kd después de impuestos = Kd × (1 − t), con t la tasa marginal de la empresa
 </blockquote>
 <p><strong><br/>
 </strong></p>
-</section></article></section><section class="guide-page" data-guide-page="forecast" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Proyecciones, DCF y sensibilidad</h2><p>Consenso, guía del management, valor terminal, EV, equity bridge, valor por acción y sensibilidad de dos vías.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-5-proyecciones-de-flujos-de-efectivo"><strong>6. Paso 5: Proyecciones de flujos de efectivo</strong></h2><section class="topic-card"><h3 class="text-71" id="qué-hay-disponible-de-expectativas-del-mercado-varias-rutas"><strong>6.1 ¿Qué hay disponible de expectativas del mercado? (varias rutas)</strong></h3>
+</section></article></div></section><section class="guide-page" data-guide-page="forecast" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Proyecciones, DCF y sensibilidad</h2><p>Consenso, guía del management, valor terminal, EV, equity bridge, valor por acción y sensibilidad de dos vías.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#forecast/forecast-6-paso-5-proyecciones-de-flujos-de-efectivo">6. Paso 5: Proyecciones de flujos de efectivo</a></li><li class="toc-sub"><a href="#forecast/forecast-6-1-qu-hay-disponible-de-expectativas-del-mercado-varia">6.1 ¿Qué hay disponible de expectativas del mercado? (varias rutas)</a></li><li class="toc-sub"><a href="#forecast/forecast-6-3-valor-terminal">6.3 Valor terminal</a></li><li class="toc-main"><a href="#forecast/forecast-7-paso-6-del-valor-presente-al-valor-por-acci-n">7. Paso 6: Del valor presente al valor por acción</a></li><li class="toc-sub"><a href="#forecast/forecast-7-1-an-lisis-de-sensibilidad">7.1 Análisis de sensibilidad</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="forecast-6-paso-5-proyecciones-de-flujos-de-efectivo"><strong>6. Paso 5: Proyecciones de flujos de efectivo</strong></h2><section class="topic-card"><h3 class="text-71" id="forecast-6-1-qu-hay-disponible-de-expectativas-del-mercado-varia"><strong>6.1 ¿Qué hay disponible de expectativas del mercado? (varias rutas)</strong></h3>
 <ul>
 <li><p><strong><code class="terminal-command">EE</code> &lt;GO&gt;</strong> (Earnings Estimates): el consenso de analistas para ventas, EBITDA, EBIT, EPS, utilidad, dividendos, por ejercicio fiscal (1-4 años adelante), con número de analistas, máximos/mínimos e historia de revisiones.</p></li>
 <li><p><strong><code class="terminal-command">EEG</code> &lt;GO&gt;:</strong> las mismas estimaciones en gráfica (histórico vs. proyección).</p></li>
@@ -247,14 +432,14 @@ Kd después de impuestos = Kd × (1 − t), con t la tasa marginal de la empresa
 <blockquote>
 <figure class="terminal-figure"><figcaption><strong>EE</strong><span>Consenso de estimaciones financieras y operativas de analistas.</span></figcaption><img alt="EE" class="terminal-shot" data-caption="EE" data-shot="30" loading="lazy" role="button" src="assets/media/image32.png" style="width:6.2774in;height:3.41837in" tabindex="0"/></figure>
 </blockquote>
-</section><section class="topic-card"><h3 class="text-71" id="valor-terminal"><strong>6.3 Valor terminal</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="forecast-6-3-valor-terminal"><strong>6.3 Valor terminal</strong></h3>
 <p><strong>Método de Gordon (crecimiento perpetuo):</strong><br/>
 <br/>
 <div aria-label="VTₙ = FCFFₙ₊₁ / (WACC − g) = FCFFₙ × (1 + g) / (WACC − g)" class="equation" role="math">VTₙ = FCFFₙ₊₁ / (WACC − g) = FCFFₙ × (1 + g) / (WACC − g)</div><br/>
 con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempre g &lt; <code class="terminal-command">WACC</code>.</p>
 <p><strong>Método de múltiplo de salida:</strong> VT = EBITDA final × múltiplo de salida (el promedio de múltiplos actuales del sector, del Paso 7, ajustado por ciclo).</p><div aria-label="VT = EBITDA final × Múltiplo de salida" class="equation" role="math">VT = EBITDA final × Múltiplo de salida</div>
 <p>Hagan ambos y comparen: si difieren mucho, algo está fuera de lugar. Un valor terminal que representa más del 75-80% del valor total sugiere un horizonte explícito demasiado corto o supuestos agresivos.</p>
-</section><h2 class="text-29" id="paso-6-del-valor-presente-al-valor-por-acción"><strong>7. Paso 6: Del valor presente al valor por acción</strong></h2><ol type="1">
+</section><h2 class="text-29" id="forecast-7-paso-6-del-valor-presente-al-valor-por-acci-n"><strong>7. Paso 6: Del valor presente al valor por acción</strong></h2><ol type="1">
 <li><p><strong>EV =</strong> Σ FCFF descontados a <code class="terminal-command">WACC</code> + VT descontada.</p><div aria-label="EV = Σ [FCFFₜ / (1 + WACC)ᵗ] + [VTₙ / (1 + WACC)ⁿ]" class="equation" role="math">EV = Σ [FCFFₜ / (1 + WACC)ᵗ] + [VTₙ / (1 + WACC)ⁿ]</div></li>
 <li><p><strong>Puente al valor de equity (equity bridge):</strong></p>
 <ul>
@@ -268,11 +453,11 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 </ul></li>
 <li><p><strong>Valor por acción</strong> = Valor de equity / acciones en circulación (<code class="terminal-command">DES</code>).</p><div aria-label="Valor por acción = Valor de equity / Acciones en circulación" class="equation" role="math">Valor por acción = Valor de equity / Acciones en circulación</div></li>
 <li><p>Comparen contra el precio de mercado: si su valor es muy distinto, expliquen por qué (¡ese es el análisis!).</p></li>
-</ol><section class="topic-card"><h3 class="text-71" id="análisis-de-sensibilidad"><strong>7.1 Análisis de sensibilidad</strong> </h3>
+</ol><section class="topic-card"><h3 class="text-71" id="forecast-7-1-an-lisis-de-sensibilidad"><strong>7.1 Análisis de sensibilidad</strong> </h3>
 <p>Tabla de dos vías en Excel: <strong><code class="terminal-command">WACC</code> (±1.0 pp en pasos de 0.5) contra g (±0.5 pp en pasos de 0.25)</strong>, mostrando el valor por acción. Monte la tabla con funciones <code class="terminal-command">BDP</code>/<code class="terminal-command">BDH</code> para los insumos de mercado y sus propios supuestos para el resto. Es la mejor defensa contra la falsa precisión y una excelente base de discusión del rango de negociación en M&amp;A.</p>
 <p><strong><br/>
 </strong></p>
-</section></article></section><section class="guide-page" data-guide-page="comps" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Comparables</h2><p>Selección de peers, múltiplos trailing y forward, diagnóstico de outliers e imputación de valor.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-7-valuación-por-múltiplos-de-comparables"><strong>8. Paso 7: Valuación por múltiplos de comparables</strong></h2><section class="topic-card"><h3 class="text-71" id="armar-el-universo-de-comparables-varias-rutas"><strong>8.1 Armar el universo de comparables (varias rutas)</strong></h3>
+</section></article></div></section><section class="guide-page" data-guide-page="comps" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Comparables</h2><p>Selección de peers, múltiplos trailing y forward, diagnóstico de outliers e imputación de valor.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#comps/comps-8-paso-7-valuaci-n-por-m-ltiplos-de-comparables">8. Paso 7: Valuación por múltiplos de comparables</a></li><li class="toc-sub"><a href="#comps/comps-8-1-armar-el-universo-de-comparables-varias-rutas">8.1 Armar el universo de comparables (varias rutas)</a></li><li class="toc-sub"><a href="#comps/comps-8-2-m-ltiplos-a-calcular">8.2 Múltiplos a calcular</a></li><li class="toc-sub"><a href="#comps/comps-8-3-lectura-profesional-de-los-m-ltiplos">8.3 Lectura profesional de los múltiplos</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="comps-8-paso-7-valuaci-n-por-m-ltiplos-de-comparables"><strong>8. Paso 7: Valuación por múltiplos de comparables</strong></h2><section class="topic-card"><h3 class="text-71" id="comps-8-1-armar-el-universo-de-comparables-varias-rutas"><strong>8.1 Armar el universo de comparables (varias rutas)</strong></h3>
 <ul>
 <li><p><strong>Ruta 1, comparables de la plataforma: <code class="terminal-command">RV</code> &lt;GO&gt;</strong> (Relative Value): la empresa contra un grupo de pares definido por Bloomberg o por ustedes; pestañas de múltiplos (EV/EBITDA, EV/EBIT, P/E, forward y trailing), ratios financieros y retornos. Pueden <strong>editar el peer group</strong> (agregar Soriana, Chedraui, retailers regionales) y guardar su grupo.</p></li>
 <li><p><strong>Ruta 2, screening propio: <code class="terminal-command">EQS</code> &lt;GO&gt;</strong> (Equity Search): screen de empresas por industria, país, tamaño; exporten la lista y tráiganla a <code class="terminal-command">RV</code> como peer group custom.</p></li>
@@ -283,20 +468,20 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 <figure class="terminal-figure"><figcaption><strong>RV</strong><span>Múltiplos de valuación y métricas de mercado frente a pares.</span></figcaption><img alt="RV" class="terminal-shot" data-caption="RV" data-shot="31" loading="lazy" role="button" src="assets/media/image34.png" style="width:6.20644in;height:3.21793in" tabindex="0"/></figure>
 <p><em>Parámetros para agregar múltiplos de ingresos</em></p>
 </blockquote>
-</section><section class="topic-card"><h3 class="text-71" id="múltiplos-a-calcular"><strong>8.2 Múltiplos a calcular</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="comps-8-2-m-ltiplos-a-calcular"><strong>8.2 Múltiplos a calcular</strong></h3>
 <ul>
 <li><p><strong>EV/EBITDA</strong> (el rey en M&amp;A), <strong>EV/EBIT</strong>, <strong>EV/Ventas</strong>, <strong>P/E</strong>, <strong>P/FCFF</strong>.</p></li>
 <li><p><strong>Forward:</strong> con las estimaciones del próximo ejercicio de <code class="terminal-command">EE</code> (<code class="terminal-command">RV</code> los trae con la columna forward); <strong>trailing:</strong> con los últimos 12 meses.</p></li>
 <li><p>EV de cada comparable = capitalización de mercado + deuda financiera total − caja y equivalentes (todo de <code class="terminal-command">DES</code>/<code class="terminal-command">FA</code>, o directamente los campos de EV en <code class="terminal-command">RV</code>/Excel).</p></li>
 </ul>
-</section><section class="topic-card"><h3 class="text-71" id="lectura-profesional-de-los-múltiplos"><strong>8.3 Lectura profesional de los múltiplos</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="comps-8-3-lectura-profesional-de-los-m-ltiplos"><strong>8.3 Lectura profesional de los múltiplos</strong></h3>
 <ol type="1">
 <li><p>Reporten <strong>mediana</strong> y rango (la media se contamina por outliers).</p></li>
 <li><p>Extremos: el comparable con EV/EBITDA de 3x o de 25x, ¿por qué? (apalancamiento, crecimiento, margen, ciclo).</p></li>
 <li><p>Ubiquen a su empresa: el múltiplo que "merece" depende de <strong>crecimiento, rentabilidad y riesgo</strong> vs. los pares. Hagan el scatter de múltiplo vs. crecimiento esperado en Excel (crecimiento de <code class="terminal-command">EE</code>).</p></li>
 <li><p>Imputen el valor: EV objetivo = EBITDA de su empresa × múltiplo mediana (o rango), y de ahí al equity bridge del Paso 6.</p><div aria-label="EV objetivo = EBITDA de la empresa × Múltiplo mediano" class="equation" role="math">EV objetivo = EBITDA de la empresa × Múltiplo mediano</div></li>
 </ol>
-</section></article></section><section class="guide-page" data-guide-page="precedents" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Transacciones precedentes</h2><p>Búsqueda de deals, filtros, múltiplos, primas pagadas, contexto de mercado y ajustes de comparabilidad.</p></div><article class="content-card guide-content"><h2 class="text-29" id="paso-8-transacciones-precedentes"><strong>9. Paso 8: Transacciones precedentes</strong></h2><p><strong><code class="terminal-command">MA</code> &lt;GO&gt;</strong> es la función central de M&amp;A de Bloomberg: cobertura global desde 1997, pública y privada, con valores, términos, <strong>primas</strong>, asesores y estados financieros al momento del deal.</p><section class="topic-card"><h3 class="text-71" id="pantalla-de-búsqueda-de-transacciones"><strong>9.1 Pantalla de búsqueda de transacciones</strong></h3>
+</section></article></div></section><section class="guide-page" data-guide-page="precedents" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Transacciones precedentes</h2><p>Búsqueda de deals, filtros, múltiplos, primas pagadas, contexto de mercado y ajustes de comparabilidad.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#precedents/precedents-9-paso-8-transacciones-precedentes">9. Paso 8: Transacciones precedentes</a></li><li class="toc-sub"><a href="#precedents/precedents-9-1-pantalla-de-b-squeda-de-transacciones">9.1 Pantalla de búsqueda de transacciones</a></li><li class="toc-sub"><a href="#precedents/precedents-9-2-m-ltiplos-y-primas-de-las-transacciones">9.2 Múltiplos y primas de las transacciones</a></li><li class="toc-sub"><a href="#precedents/precedents-9-3-del-lado-de-la-empresa-y-del-mercado-rutas-compleme">9.3 Del lado de la empresa y del mercado (rutas complementarias)</a></li><li class="toc-sub"><a href="#precedents/precedents-9-4-ajustes-de-criterio">9.4 Ajustes de criterio</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="precedents-9-paso-8-transacciones-precedentes"><strong>9. Paso 8: Transacciones precedentes</strong></h2><p><strong><code class="terminal-command">MA</code> &lt;GO&gt;</strong> es la función central de M&amp;A de Bloomberg: cobertura global desde 1997, pública y privada, con valores, términos, <strong>primas</strong>, asesores y estados financieros al momento del deal.</p><section class="topic-card"><h3 class="text-71" id="precedents-9-1-pantalla-de-b-squeda-de-transacciones"><strong>9.1 Pantalla de búsqueda de transacciones</strong></h3>
 <ol type="1">
 <li><p><strong><code class="terminal-command">MA</code> &lt;GO&gt;</strong>, luego <strong>Advanced Search</strong>. Filtros sugeridos (equivalentes a los de las otras guías):</p>
 <ul>
@@ -309,7 +494,6 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 <li><p><strong>Truco:</strong> pueden ver el perfil completo de cada deal (timeline, términos, financieras al anuncio): úsenlo para recalcular múltiplos con EBITDA LTM al cierre del anuncio, no solo el reportado.</p></li>
 </ol>
 <blockquote>
-
 <figure class="terminal-figure"><figcaption><strong>MA – Desglose de Deals (Búsqueda para comparabilidad)</strong><span>Desglose de transacciones para filtrar operaciones comparables.</span></figcaption><img alt="MA – Desglose de Deals (Búsqueda para comparabilidad)" class="terminal-shot" data-caption="MA – Desglose de Deals (Búsqueda para comparabilidad)" data-shot="32" loading="lazy" role="button" src="assets/media/image35.png" style="width:6.30065in;height:3.41487in" tabindex="0"/></figure>
 </blockquote>
 <p><strong><br/>
@@ -317,19 +501,19 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 <blockquote>
 <figure class="terminal-figure"><figcaption><strong>Lista de Deals</strong><span>Transacciones seleccionadas para el análisis de precedentes.</span></figcaption><img alt="Lista de Deals" class="terminal-shot" data-caption="Lista de Deals" data-shot="33" loading="lazy" role="button" src="assets/media/image36.png" style="width:6.32682in;height:3.44596in" tabindex="0"/></figure>
 </blockquote>
-</section><section class="topic-card"><h3 class="text-71" id="múltiplos-y-primas-de-las-transacciones"><strong>9.2 Múltiplos y primas de las transacciones</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="precedents-9-2-m-ltiplos-y-primas-de-las-transacciones"><strong>9.2 Múltiplos y primas de las transacciones</strong></h3>
 <ul>
 <li><p>Donde el target sea público o haya datos revelados: <strong>EV/EBITDA y EV/Ventas pagados</strong> por transacción.</p></li>
 <li><p>Si el target es privado sin datos revelados: análisis de <strong>primas</strong> (1D, 4W, 52W): prima mediana sobre el precio previo al anuncio. Esa prima es el insumo directo para discutir el <strong>control premium</strong> en la negociación.</p></li>
 </ul>
-</section><section class="topic-card"><h3 class="text-71" id="del-lado-de-la-empresa-y-del-mercado-rutas-complementarias"><strong>9.3 Del lado de la empresa y del mercado (rutas complementarias)</strong></h3>
+</section><section class="topic-card"><h3 class="text-71" id="precedents-9-3-del-lado-de-la-empresa-y-del-mercado-rutas-compleme"><strong>9.3 Del lado de la empresa y del mercado (rutas complementarias)</strong></h3>
 <ul>
 <li><p><strong>Busquen por empresa en la pantalla principal de <code class="terminal-command">MA</code>:</strong> escriban WALMEX en el buscador de <code class="terminal-command">MA</code> y vean todas las transacciones donde la empresa ha sido compradora o vendedora (su historia de consolidación en México y Centroamérica es buen material de clase).</p></li>
 <li><p><strong><code class="terminal-command">MNA</code> &lt;GO&gt;:</strong> estadísticas de M&amp;A por país, sector y periodo (¿a qué múltiplos se está pagando en el ciclo actual?).</p></li>
 <li><p><strong><code class="terminal-command">LEAG</code> &lt;GO&gt;:</strong> league tables de asesores y underwriters: útil en el curso para discutir el proceso de venta (¿qué bancos están activos en retail en LATAM?).</p></li>
 <li><p><strong>NSE <code class="terminal-command">MNA</code> &lt;GO&gt;:</strong> noticias de M&amp;A (rumores y anuncios del sector).</p></li>
 </ul>
-</section><section class="topic-card"><h3 class="text-71" id="ajustes-de-criterio"><strong>9.4 Ajustes de criterio</strong> </h3>
+</section><section class="topic-card"><h3 class="text-71" id="precedents-9-4-ajustes-de-criterio"><strong>9.4 Ajustes de criterio</strong> </h3>
 <ul>
 <li><p><strong>Antigüedad y ciclo:</strong> una transacción de 2021 (tasas a cero, múltiplos inflados) no vale lo mismo que una de 2024.</p></li>
 <li><p><strong>Tipo de comprador:</strong> los fondos de PE suelen pagar múltiplos distintos que los compradores estratégicos (sinergias).</p></li>
@@ -339,7 +523,7 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 </ul>
 <p><strong><br/>
 </strong></p>
-</section></article></section><section class="guide-page" data-guide-page="appendix" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Cheat sheet y fuentes</h2><p>Referencia rápida de funciones Bloomberg y fuentes externas complementarias.</p></div><article class="content-card guide-content"><h2 class="text-29" id="apéndice-a-hoja-de-funciones-usadas-en-la-guía-cheat-sheet"><strong>Apéndice A: hoja de funciones usadas en la guía (cheat sheet)</strong></h2><table>
+</section></article></div></section><section class="guide-page" data-guide-page="appendix" hidden=""><div class="page-hero"><p class="eyebrow">Guía Bloomberg</p><h2>Cheat sheet y fuentes</h2><p>Referencia rápida de funciones Bloomberg y fuentes externas complementarias.</p><nav aria-label="Contenido de esta sección" class="context-toc"><p class="context-toc-label">EN ESTA SECCIÓN</p><ul><li class="toc-main"><a href="#appendix/appendix-ap-ndice-a-hoja-de-funciones-usadas-en-la-gu-a-cheat-sh">Apéndice A: hoja de funciones usadas en la guía (cheat sheet)</a></li><li class="toc-main"><a href="#appendix/appendix-14-ap-ndice-b-fuentes-externas-complementarias">14. Apéndice B: fuentes externas complementarias</a></li></ul></nav></div><div class="page-main-content"><article class="content-card guide-content"><h2 class="text-29" id="appendix-ap-ndice-a-hoja-de-funciones-usadas-en-la-gu-a-cheat-sh"><strong>Apéndice A: hoja de funciones usadas en la guía (cheat sheet)</strong></h2><table>
 <colgroup>
 <col style="width: 38%"/>
 <col style="width: 55%"/>
@@ -434,12 +618,14 @@ con g = crecimiento nominal de largo plazo (inflación + real, Paso 4.2), siempr
 <td>Todas</td>
 </tr>
 </tbody>
-</table><h2 class="text-29" id="apéndice-b-fuentes-externas-complementarias"><strong>14. Apéndice B: fuentes externas complementarias</strong></h2><ul>
+</table><h2 class="text-29" id="appendix-14-ap-ndice-b-fuentes-externas-complementarias"><strong>14. Apéndice B: fuentes externas complementarias</strong></h2><ul>
 <li><p><strong>Aswath Damodaran (NYU Stern):</strong> primas de riesgo de mercado y por país actualizadas cada mes, gratuitas en su página de NYU; lectura obligatoria para <code class="terminal-command">WACC</code> y valor terminal.</p></li>
 <li><p><strong>Kroll (antes Duff &amp; Phelps):</strong> publicaciones de costo de capital y prima de riesgo de referencia profesional.</p></li>
 <li><p><strong>Banxico, Encuesta de Expectativas:</strong> el pronóstico de inflación y crecimiento de los especialistas en México, gratuito, ideal para contrastar contra <code class="terminal-command">ECFC</code>/<code class="terminal-command">CRP</code>.</p></li>
 <li><p><strong>BMC (Bloomberg Market Concepts) y BU &lt;GO&gt;:</strong> capacitación y certificación oficial para estudiantes.</p></li>
 <li><p><strong>Documentos de la empresa:</strong> reporte trimestral de WALMEX y anuncios (<code class="terminal-command">CF</code>/<code class="terminal-command">CN</code>): para contrastar el consenso con la guía del management.</p></li>
-</ul></article></section></main>
+</ul></article></div></section></main>
 <div aria-label="Captura ampliada" aria-modal="true" class="lightbox" hidden="" id="lightbox" role="dialog"><button aria-label="Cerrar" id="lightboxClose" type="button">×</button><img alt="" id="lightboxImage"/><p id="lightboxCaption"></p></div>
-<footer><div><strong>MAF · Fusiones y Adquisiciones · Guía de valuación utilizando Bloomberg</strong><span>EGADE Business School · Prof. Dr. Jonas Lucio Maia</span></div><div class="footer-disclaimer-block"><p>Guía elaborada con apoyo de herramientas de inteligencia artificial exclusivamente para fines académicos y docentes. Las cifras, casos y ejemplos presentados tienen carácter meramente ilustrativo y se incluyen únicamente como referencia, por lo que no deben interpretarse como datos reales ni como recomendaciones de inversión. Las funciones y rutas de Bloomberg Terminal fueron contrastadas con documentación pública y guías de bibliotecas académicas disponibles a noviembre de 2026. Dado que la plataforma se actualiza periódicamente, se recomienda utilizar &lt;HELP&gt; en cada pantalla para confirmar la funcionalidad y el procedimiento vigentes. WALMEX fue seleccionada exclusivamente con fines académicos, debido a la buena disponibilidad pública de información y a características que resultan útiles para el aprendizaje de valuación. Su inclusión no constituye una recomendación de inversión, compra, venta o mantenimiento de valores, ni implica acceso a información privada, confidencial o distinta de aquella disponible públicamente.</p><p class="footer-contact">Para cualquier corrección, sugerencia o ajuste, agradeceremos reportarlo a <a href="mailto:jonas.maia@tec.mx">jonas.maia@tec.mx</a></p></div></footer><script src="app.js"></script></body></html>
+<footer><div><strong>MAF · Fusiones y Adquisiciones · Guía de valuación utilizando Bloomberg</strong><span>EGADE Business School · Prof. Dr. Jonas Lucio Maia</span></div><div class="footer-disclaimer-block"><p>Guía elaborada con apoyo de herramientas de inteligencia artificial exclusivamente para fines académicos y docentes. Las cifras, casos y ejemplos presentados tienen carácter meramente ilustrativo y se incluyen únicamente como referencia, por lo que no deben interpretarse como datos reales ni como recomendaciones de inversión. Las funciones y rutas de Bloomberg Terminal fueron contrastadas con documentación pública y guías de bibliotecas académicas disponibles a noviembre de 2026. Dado que la plataforma se actualiza periódicamente, se recomienda utilizar &lt;HELP&gt; en cada pantalla para confirmar la funcionalidad y el procedimiento vigentes. WALMEX fue seleccionada exclusivamente con fines académicos, debido a la buena disponibilidad pública de información y a características que resultan útiles para el aprendizaje de valuación. Su inclusión no constituye una recomendación de inversión, compra, venta o mantenimiento de valores, ni implica acceso a, ni conocimiento de, información o eventos corporativos distintos de los disponibles públicamente.</p><p class="footer-contact">Para cualquier corrección, sugerencia o ajuste, agradeceremos reportarlo a <a href="mailto:jonas.maia@tec.mx">jonas.maia@tec.mx</a></p></div></footer><script>'use strict';
+(function(){const buttons=[...document.querySelectorAll('[data-page]')],pages=[...document.querySelectorAll('[data-guide-page]')];function show(key){pages.forEach(p=>p.hidden=p.dataset.guidePage!==key);buttons.forEach(b=>b.classList.toggle('active',b.dataset.page===key));window.scrollTo({top:0,behavior:'smooth'});history.replaceState(null,'','#'+key)}buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));const initial=location.hash.slice(1);show(pages.some(p=>p.dataset.guidePage===initial)?initial:'overview');const lb=document.querySelector('#lightbox'),lbImg=document.querySelector('#lightboxImage'),cap=document.querySelector('#lightboxCaption');function open(img){lbImg.src=img.src;lbImg.alt=img.alt;cap.textContent=img.dataset.caption||img.alt;lb.hidden=false;document.body.style.overflow='hidden';document.querySelector('#lightboxClose').focus()}function close(){lb.hidden=true;lbImg.src='';document.body.style.overflow=''}document.querySelectorAll('.terminal-shot').forEach(img=>{img.addEventListener('click',()=>open(img));img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(img)}})});document.querySelector('#lightboxClose').addEventListener('click',close);lb.addEventListener('click',e=>{if(e.target===lb)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)close()})})();
+</script></body></html>
